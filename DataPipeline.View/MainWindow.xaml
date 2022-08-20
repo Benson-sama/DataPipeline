@@ -1,0 +1,28 @@
+﻿<Window x:Class="DataPipeline.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DataPipeline.View"
+        mc:Ignorable="d"
+        Title="Data Pipeline © 2022 Benjamin BOGNER"
+        WindowStartupLocation="CenterScreen"
+        Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto" MinHeight="30"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="4" Margin="25 25 25 5">
+            <Canvas Background="LightGray">
+                <Line X1="300" X2="600" Y1="300" Y2="300" Stroke="Black" StrokeThickness="5"/>
+                <Ellipse x:Name="blueEllipse" Fill="CornflowerBlue" Canvas.Left="200" Canvas.Top="200" Width="200" Height="200"/>
+                <Ellipse x:Name="redEllipse" Fill="IndianRed" Canvas.Left="500" Canvas.Top="200" Width="200" Height="200"/>
+            </Canvas>
+        </Border>
+        <Grid Grid.Row="1">
+            <Button x:Name="loadButton" Click="LoadButton_Click" HorizontalAlignment="Left" Content="Load" Height="25" Width="75" Margin="25 10 0 10"/>
+            <Button x:Name="stateButton" HorizontalAlignment="Left" Content="Start" Height="25" Width="75" Margin="125 10 0 10"/>
+        </Grid>
+    </Grid>
+</Window>
