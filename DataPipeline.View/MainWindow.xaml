@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:DataPipeline.View"
         mc:Ignorable="d"
         Title="Data Pipeline © 2022 Benjamin BOGNER"
-        WindowStartupLocation="CenterScreen"
-        Height="450" Width="800">
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -15,9 +14,10 @@
         </Grid.RowDefinitions>
         <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="4" Margin="25 25 25 5">
             <Canvas Background="LightGray">
-                <Line X1="300" X2="600" Y1="300" Y2="300" Stroke="Black" StrokeThickness="5"/>
-                <Ellipse x:Name="blueEllipse" Fill="CornflowerBlue" Canvas.Left="200" Canvas.Top="200" Width="200" Height="200"/>
-                <Ellipse x:Name="redEllipse" Fill="IndianRed" Canvas.Left="500" Canvas.Top="200" Width="200" Height="200"/>
+                <Line X1="100" X2="250" Y1="100" Y2="150" Stroke="Black" StrokeThickness="5"/>
+                <Polyline StrokeThickness="3" Stroke="Black" Points="100,300 210,400 330,290 440,300"/>
+                <Ellipse x:Name="blueEllipse" Fill="CornflowerBlue" Canvas.Left="50" Canvas.Top="50" Width="100" Height="100"/>
+                <Ellipse x:Name="redEllipse" Fill="IndianRed" Canvas.Left="200" Canvas.Top="100" Width="100" Height="100"/>
             </Canvas>
         </Border>
         <Grid Grid.Row="1">

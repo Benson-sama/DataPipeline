@@ -13,7 +13,7 @@ namespace RandomNumberGenerator
     using DataUnits;
 
     [DataUnitInformation(
-        "Random number generator",
+        name:"Random number generator",
         Description = "This data unit is used to generate random numbers every two seconds.",
         InputDatatype = typeof(void),
         InputDescription = "This data unit has no data input.",
@@ -27,6 +27,7 @@ namespace RandomNumberGenerator
 
         private RandomNumberGeneratorThreadArguments threadArguments;
 
+        [DataOutput]
         public event EventHandler<ValueOutputEventArgs<int>> ValueGenerated;
 
         public RandomNumberGenerator()
