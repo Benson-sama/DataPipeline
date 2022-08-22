@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("StringToNumberProcessor")]
+[assembly: AssemblyTitle("StringProcessor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("StringToNumberProcessor")]
+[assembly: AssemblyProduct("StringProcessor")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("d0689b3c-7002-4574-9ee6-20daa41a60ec")]
+[assembly: Guid("c913d43f-b464-4675-a3e1-dc78afe7c34a")]
 
 // Version information for an assembly consists of the following four values:
 //

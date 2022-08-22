@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D0689B3C-7002-4574-9EE6-20DAA41A60EC}</ProjectGuid>
+    <ProjectGuid>{C913D43F-B464-4675-A3E1-DC78AFE7C34A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StringToNumberProcessor</RootNamespace>
-    <AssemblyName>StringToNumberProcessor</AssemblyName>
+    <RootNamespace>StringProcessor</RootNamespace>
+    <AssemblyName>StringProcessor</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StringToNumberProcessor.cs" />
+    <Compile Include="StringProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

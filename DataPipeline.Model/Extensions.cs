@@ -27,7 +27,7 @@ namespace DataPipeline.Model
         {
             foreach (var type in assembly.GetTypes())
             {
-                if (type.GetInterfaces().Any(p => p.IsGenericType && p.GetGenericTypeDefinition() == interfaceType))
+                if (type.GetInterfaces().Contains(interfaceType))
                 {
                     yield return type;
                 }

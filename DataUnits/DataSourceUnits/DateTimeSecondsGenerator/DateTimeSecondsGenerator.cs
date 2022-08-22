@@ -9,6 +9,7 @@ namespace DateTimeSecondsGenerator
 {
     using System;
     using DataPipeline.Model.Attributes;
+    using DataPipeline.Model.Interfaces;
     using DataUnits;
 
     [DataUnitInformation(

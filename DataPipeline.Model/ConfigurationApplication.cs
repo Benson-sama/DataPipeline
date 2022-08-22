@@ -45,25 +45,33 @@ namespace DataPipeline.Model
         }
 
         /// <summary>
-        /// Loads all <see cref="ReflectedDataSourceUnit"/>s that are stored in the DSU folder in the application directory.
+        /// Loads all data source units that are stored in the DSU folder in the application directory.
         /// </summary>
         private void LoadDSUs()
         {
             var dataSourceUnitFiles = Directory.GetFiles("DSU").ToList();
-            var dataSourceUnitsAssemblies = dataSourceUnitFiles.Select(p => Assembly.LoadFrom(p)).ToList();
-            //var dataSourceUnitTypes = dataSourceUnitsAssemblies.GetTypesWithInterface(typeof(IDataSourceUnit<>)).ToList();
-            //dataSourceUnitTypes.ForEach(p => this.dataSourceUnits.Add(new ReflectedDataSourceUnit(p)));
+            var dataSourceUnitAssemblies = dataSourceUnitFiles.Select(p => Assembly.LoadFrom(p)).ToList();
+            List<Type> dataSourceUnitTypes = new List<Type>();
+
+            foreach (var assembly in dataSourceUnitAssemblies)
+            {
+                dataSourceUnitTypes = dataSourceUnitTypes.Concat(assembly.GetTypes()).ToList();
+            }
         }
 
         /// <summary>
-        /// Loads all <see cref="int"/>s that are stored in the DSU folder in the application directory.
+        /// Loads all data processing units that are stored in the DSU folder in the application directory.
         /// </summary>
         private void LoadDPUs()
         {
             var dataProcessingUnitFiles = Directory.GetFiles("DPU").ToArray();
             var dataProcessingUnitAssemblies = dataProcessingUnitFiles.Select(p => Assembly.LoadFrom(p)).ToList();
-            //var dataProcessingUnitTypes = dataProcessingUnitAssemblies.GetTypesWithInterface(typeof(IDataProcessingUnit<>)).ToList();
-            //dataProcessingUnitTypes.ForEach(p => this.dataProcessingUnits.Add(new ReflectedDataProcessingUnit(p)));
+            List<Type> dataProcessingUnitTypes = new List<Type>();
+
+            foreach (var assembly in dataProcessingUnitAssemblies)
+            {
+                dataProcessingUnitTypes = dataProcessingUnitTypes.Concat(assembly.GetTypes()).ToList();
+            }
         }
     }
 }
