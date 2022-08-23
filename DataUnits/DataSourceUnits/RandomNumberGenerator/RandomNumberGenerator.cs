@@ -10,7 +10,6 @@ namespace RandomNumberGenerator
     using System;
     using System.Threading;
     using DataPipeline.Model.Attributes;
-    using DataPipeline.Model.Interfaces;
     using DataUnits;
 
     [DataUnitInformation(

@@ -11,6 +11,7 @@ namespace DataPipeline.Model
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using DataPipeline.Model.Attributes;
 
     /// <summary>
     /// Represents the <see cref="Extensions"/> class.
@@ -18,16 +19,15 @@ namespace DataPipeline.Model
     public static class Extensions
     {
         /// <summary>
-        /// Gets a collection of types that implement the specified interface type based on one assembly.
+        /// Gets a collection of types that have the specified attribute type based on a collection of assemblies.
         /// </summary>
-        /// <param name="assembly">The assembly that gets searched for types.</param>
-        /// <param name="interfaceType">The interface type used for filtering types.</param>
+        /// <param name="assemblies">The assemblies that get searched for types.</param>
         /// <returns>The desired collection of types as an IEnumerable.</returns>
-        public static IEnumerable<Type> GetTypesWithInterface(this Assembly assembly, Type interfaceType)
+        public static IEnumerable<Type> GetDataUnitTypes(this IEnumerable<Assembly> assemblies)
         {
-            foreach (var type in assembly.GetTypes())
+            foreach (var assembly in assemblies)
             {
-                if (type.GetInterfaces().Contains(interfaceType))
+                foreach (var type in assembly.GetDataUnitTypes())
                 {
                     yield return type;
                 }
@@ -35,16 +35,26 @@ namespace DataPipeline.Model
         }
 
         /// <summary>
-        /// Gets a collection of types that implement the specified interface type based on a list of assemblies.
+        /// Gets a collection of types that have the specified attribute type based on one assembly.
         /// </summary>
-        /// <param name="list">The assemblies that get searched for types.</param>
-        /// <param name="interfaceType">The interface type used for filtering types.</param>
+        /// <param name="assembly">The assembly that gets searched for types.</param>
         /// <returns>The desired collection of types as an IEnumerable.</returns>
-        public static IEnumerable<Type> GetTypesWithInterface(this List<Assembly> list, Type interfaceType)
+        public static IEnumerable<Type> GetDataUnitTypes(this Assembly assembly)
         {
-            foreach (var assembly in list)
+            List<Type> loadedTypes;
+
+            try
             {
-                foreach (var type in assembly.GetTypesWithInterface(interfaceType))
+                loadedTypes = assembly.GetTypes().ToList();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                loadedTypes = e.Types.Where(x => x != null).ToList();
+            }
+
+            foreach (var type in loadedTypes)
+            {
+                if (type.GetCustomAttribute<DataUnitInformationAttribute>() != null)
                 {
                     yield return type;
                 }

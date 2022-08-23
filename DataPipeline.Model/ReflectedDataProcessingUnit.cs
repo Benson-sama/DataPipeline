@@ -21,6 +21,7 @@ namespace DataPipeline.Model
         public ReflectedDataProcessingUnit(Type dataProcessingUnitType) : base(dataProcessingUnitType)
         {
             this.ValueProcessedEvent = this.Type.GetEvents().First(x => x.GetCustomAttribute<DataOutputAttribute>() != null);
+            this.ValueInputMethod = this.Type.GetMethods().First(x => x.GetCustomAttribute<DataInputAttribute>() != null);
         }
 
         public MethodInfo ValueInputMethod

@@ -24,6 +24,12 @@ namespace DataPipeline.Model.Attributes
 
         private string outputDescription;
 
+        /// <summary>
+        /// Initialises a new instance of the <see cref="DataUnitInformationAttribute"/> class.
+        /// By trusting the user of this class, the parameters for this constructor have been
+        /// reduced to only the name. It is advised to pass all remaining parameters via advanced initialising.
+        /// </summary>
+        /// <param name="name">The name for this <see cref="DataUnitInformationAttribute"/>.</param>
         public DataUnitInformationAttribute(string name)
         {
             this.Name = name;

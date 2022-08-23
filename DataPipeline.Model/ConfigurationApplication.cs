@@ -18,11 +18,43 @@ namespace DataPipeline.Model
     /// </summary>
     public class ConfigurationApplication
     {
+        private List<ReflectedDataSourceUnit> dataSourceUnits;
+
+        private List<ReflectedDataProcessingUnit> dataProcessingUnits;
+
         /// <summary>
         /// Initialises a new instance of the <see cref="ConfigurationApplication"/> class.
         /// </summary>
         public ConfigurationApplication()
         {
+            this.DataSourceUnits = new List<ReflectedDataSourceUnit>();
+            this.DataProcessingUnits = new List<ReflectedDataProcessingUnit>();
+        }
+
+        public List<ReflectedDataSourceUnit> DataSourceUnits
+        {
+            get
+            {
+                return this.dataSourceUnits;
+            }
+
+            private set
+            {
+                this.dataSourceUnits = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null.");
+            }
+        }
+
+        public List<ReflectedDataProcessingUnit> DataProcessingUnits
+        {
+            get
+            {
+                return this.dataProcessingUnits;
+            }
+
+            private set
+            {
+                this.dataProcessingUnits = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null.");
+            }
         }
 
         /// <summary>
@@ -32,6 +64,23 @@ namespace DataPipeline.Model
         {
             this.LoadDSUs();
             this.LoadDPUs();
+
+            this.TestLink();
+        }
+
+        private void TestLink()
+        {
+            var reflectedDataSourceUnit = DataSourceUnits.First();
+            var reflectedDataProcessingUnit = DataProcessingUnits.First();
+
+            Type tDelegate = reflectedDataSourceUnit.ValueGeneratedEvent.EventHandlerType;
+            MethodInfo miHandler = reflectedDataProcessingUnit.ValueInputMethod;
+
+            Delegate d = Delegate.CreateDelegate(tDelegate, reflectedDataProcessingUnit.Instance, miHandler);
+
+            MethodInfo addHandler = reflectedDataSourceUnit.ValueGeneratedEvent.GetAddMethod();
+            object[] addHandlerArgs = { d };
+            addHandler.Invoke(reflectedDataSourceUnit.Instance, addHandlerArgs);
         }
 
         /// <summary>
@@ -49,13 +98,34 @@ namespace DataPipeline.Model
         /// </summary>
         private void LoadDSUs()
         {
-            var dataSourceUnitFiles = Directory.GetFiles("DSU").ToList();
-            var dataSourceUnitAssemblies = dataSourceUnitFiles.Select(p => Assembly.LoadFrom(p)).ToList();
-            List<Type> dataSourceUnitTypes = new List<Type>();
+            var dataSourceUnitFiles = Directory.EnumerateFiles("DSU", "*", SearchOption.TopDirectoryOnly);
+            List<Assembly> dataSourceUnitAssemblies = new List<Assembly>();
 
-            foreach (var assembly in dataSourceUnitAssemblies)
+            foreach (var file in dataSourceUnitFiles)
             {
-                dataSourceUnitTypes = dataSourceUnitTypes.Concat(assembly.GetTypes()).ToList();
+                try
+                {
+                    Assembly loadedAssembly = Assembly.LoadFrom(file);
+                    dataSourceUnitAssemblies.Add(loadedAssembly);
+                }
+                catch (Exception)
+                {
+                    // Could not load assembly.
+                }
+            }
+
+            var dataSourceUnitTypes = dataSourceUnitAssemblies.GetDataUnitTypes();
+
+            foreach (var type in dataSourceUnitTypes)
+            {
+                try
+                {
+                    this.DataSourceUnits.Add(new ReflectedDataSourceUnit(type));
+                }
+                catch (Exception)
+                {
+                    // Data Source Unit does not meet the requirements.
+                }
             }
         }
 
@@ -64,13 +134,34 @@ namespace DataPipeline.Model
         /// </summary>
         private void LoadDPUs()
         {
-            var dataProcessingUnitFiles = Directory.GetFiles("DPU").ToArray();
-            var dataProcessingUnitAssemblies = dataProcessingUnitFiles.Select(p => Assembly.LoadFrom(p)).ToList();
-            List<Type> dataProcessingUnitTypes = new List<Type>();
+            var dataProcessingUnitFiles = Directory.EnumerateFiles("DPU", "*", SearchOption.TopDirectoryOnly);
+            List<Assembly> dataProcessingUnitAssemblies = new List<Assembly>();
 
-            foreach (var assembly in dataProcessingUnitAssemblies)
+            foreach (var file in dataProcessingUnitFiles)
             {
-                dataProcessingUnitTypes = dataProcessingUnitTypes.Concat(assembly.GetTypes()).ToList();
+                try
+                {
+                    Assembly loadedAssembly = Assembly.LoadFrom(file);
+                    dataProcessingUnitAssemblies.Add(loadedAssembly);
+                }
+                catch (Exception)
+                {
+                    // Could not load assembly.
+                }
+            }
+
+            var dataProcessingUnitTypes = dataProcessingUnitAssemblies.GetDataUnitTypes();
+
+            foreach (var type in dataProcessingUnitTypes)
+            {
+                try
+                {
+                    this.DataProcessingUnits.Add(new ReflectedDataProcessingUnit(type));
+                }
+                catch (Exception)
+                {
+                    // Data Processing Unit does not meet the requirements.
+                }
             }
         }
     }
