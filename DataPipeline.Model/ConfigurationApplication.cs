@@ -57,6 +57,8 @@ namespace DataPipeline.Model
             }
         }
 
+        public bool IsRunning { get; private set; }
+
         /// <summary>
         /// Loads DSUs and DPUs from their corresponding folders on disk.
         /// </summary>
@@ -64,33 +66,48 @@ namespace DataPipeline.Model
         {
             this.LoadDSUs();
             this.LoadDPUs();
-
-            this.TestLink();
         }
 
-        private void TestLink()
+        public void Start()
         {
-            var reflectedDataSourceUnit = DataSourceUnits.First();
-            var reflectedDataProcessingUnit = DataProcessingUnits.First();
+        }
 
-            Type tDelegate = reflectedDataSourceUnit.ValueGeneratedEvent.EventHandlerType;
-            MethodInfo miHandler = reflectedDataProcessingUnit.ValueInputMethod;
+        public void Stop()
+        {
+        }
 
-            Delegate d = Delegate.CreateDelegate(tDelegate, reflectedDataProcessingUnit.Instance, miHandler);
+        private void Link(ReflectedDataSourceUnit sourceUnit, ReflectedDataProcessingUnit processingUnit)
+        {
+            if (!this.DataSourceUnits.Contains(sourceUnit) || !this.DataProcessingUnits.Contains(processingUnit))
+            {
+                return;
+            }
 
-            MethodInfo addHandler = reflectedDataSourceUnit.ValueGeneratedEvent.GetAddMethod();
+            Type tDelegate = sourceUnit.ValueGeneratedEvent.EventHandlerType;
+            MethodInfo miHandler = processingUnit.ValueInputMethod;
+
+            Delegate d = Delegate.CreateDelegate(tDelegate, processingUnit.Instance, miHandler);
+
+            MethodInfo addHandler = sourceUnit.ValueGeneratedEvent.GetAddMethod();
             object[] addHandlerArgs = { d };
-            addHandler.Invoke(reflectedDataSourceUnit.Instance, addHandlerArgs);
+            addHandler.Invoke(sourceUnit.Instance, addHandlerArgs);
         }
 
-        /// <summary>
-        /// Connects two data units if it is possible.
-        /// </summary>
-        /// <param name="firstElement">The first data unit.</param>
-        /// <param name="secondElement">The second data unit.</param>
-        public void Link(int firstElement, int secondElement)
+        private void Link(ReflectedDataProcessingUnit firstProcessingUnit, ReflectedDataProcessingUnit secondProcessingUnit)
         {
-            throw new NotImplementedException();
+            if (!this.DataProcessingUnits.Contains(firstProcessingUnit) || !this.DataProcessingUnits.Contains(secondProcessingUnit))
+            {
+                return;
+            }
+
+            Type tDelegate = firstProcessingUnit.ValueProcessedEvent.EventHandlerType;
+            MethodInfo miHandler = secondProcessingUnit.ValueInputMethod;
+
+            Delegate d = Delegate.CreateDelegate(tDelegate, secondProcessingUnit.Instance, miHandler);
+
+            MethodInfo addHandler = firstProcessingUnit.ValueProcessedEvent.GetAddMethod();
+            object[] addHandlerArgs = { d };
+            addHandler.Invoke(firstProcessingUnit.Instance, addHandlerArgs);
         }
 
         /// <summary>
@@ -98,15 +115,16 @@ namespace DataPipeline.Model
         /// </summary>
         private void LoadDSUs()
         {
-            var dataSourceUnitFiles = Directory.EnumerateFiles("DSU", "*", SearchOption.TopDirectoryOnly);
-            List<Assembly> dataSourceUnitAssemblies = new List<Assembly>();
+            var dataSourceUnitFiles = Directory.EnumerateFiles("DSU", "*.dll", SearchOption.TopDirectoryOnly);
+            dataSourceUnitFiles = dataSourceUnitFiles.Concat(Directory.EnumerateFiles("DSU", "*.exe", SearchOption.TopDirectoryOnly)).ToList();
+            List<Assembly> loadedAssemblies = new List<Assembly>();
 
             foreach (var file in dataSourceUnitFiles)
             {
                 try
                 {
                     Assembly loadedAssembly = Assembly.LoadFrom(file);
-                    dataSourceUnitAssemblies.Add(loadedAssembly);
+                    loadedAssemblies.Add(loadedAssembly);
                 }
                 catch (Exception)
                 {
@@ -114,7 +132,7 @@ namespace DataPipeline.Model
                 }
             }
 
-            var dataSourceUnitTypes = dataSourceUnitAssemblies.GetDataUnitTypes();
+            var dataSourceUnitTypes = loadedAssemblies.GetDataUnitTypes();
 
             foreach (var type in dataSourceUnitTypes)
             {
@@ -134,15 +152,16 @@ namespace DataPipeline.Model
         /// </summary>
         private void LoadDPUs()
         {
-            var dataProcessingUnitFiles = Directory.EnumerateFiles("DPU", "*", SearchOption.TopDirectoryOnly);
-            List<Assembly> dataProcessingUnitAssemblies = new List<Assembly>();
+            var dataProcessingUnitFiles = Directory.EnumerateFiles("DPU", "*.dll", SearchOption.TopDirectoryOnly);
+            dataProcessingUnitFiles = dataProcessingUnitFiles.Concat(Directory.EnumerateFiles("DPU", "*.exe", SearchOption.TopDirectoryOnly)).ToList();
+            List<Assembly> loadedAssemblies = new List<Assembly>();
 
             foreach (var file in dataProcessingUnitFiles)
             {
                 try
                 {
                     Assembly loadedAssembly = Assembly.LoadFrom(file);
-                    dataProcessingUnitAssemblies.Add(loadedAssembly);
+                    loadedAssemblies.Add(loadedAssembly);
                 }
                 catch (Exception)
                 {
@@ -150,7 +169,7 @@ namespace DataPipeline.Model
                 }
             }
 
-            var dataProcessingUnitTypes = dataProcessingUnitAssemblies.GetDataUnitTypes();
+            var dataProcessingUnitTypes = loadedAssemblies.GetDataUnitTypes();
 
             foreach (var type in dataProcessingUnitTypes)
             {
