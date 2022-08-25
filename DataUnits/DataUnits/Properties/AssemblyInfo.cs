@@ -1,4 +1,11 @@
-﻿using System.Reflection;
+﻿//----------------------------------------------------------------
+// <copyright file="AssemblyInfo.cs" company="FH Wiener Neustadt">
+//     Copyright (c) FH Wiener Neustadt. All rights reserved.
+// </copyright>
+// <author>Benjamin Bogner</author>
+// <summary>Contains the AssemblyInfo class.</summary>
+//----------------------------------------------------------------
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

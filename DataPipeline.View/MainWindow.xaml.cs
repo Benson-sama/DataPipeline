@@ -39,7 +39,7 @@ namespace DataPipeline.View
             this.DataContext = this.configAppVM;
             this.configAppVM.LoadExtensions();
             this.dataVisualisationUnits = this.configAppVM.DataVisualisationUnits.Select(x => x.Instance as UserControl);
-            this.dataVisualisationUnitsControl.ItemsSource = dataVisualisationUnits;
+            this.dataVisualisationUnitsControl.ItemsSource = this.dataVisualisationUnits;
         }
 
         /// <summary>

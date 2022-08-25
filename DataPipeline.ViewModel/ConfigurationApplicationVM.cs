@@ -25,10 +25,8 @@ namespace DataPipeline.ViewModel
         /// </summary>
         private readonly ConfigurationApplication configApp;
 
-        //private ObservableCollection<ReflectedDataSourceUnit> dataSourceUnits;
-
-        //private ObservableCollection<ReflectedDataProcessingUnit> dataProcessingUnits;
-
+        // private ObservableCollection<ReflectedDataSourceUnit> dataSourceUnits;
+        // private ObservableCollection<ReflectedDataProcessingUnit> dataProcessingUnits;
         private ObservableCollection<ReflectedDataVisualisationUnit> dataVisualisationUnits;
 
         /// <summary>

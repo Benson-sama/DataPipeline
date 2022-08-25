@@ -9,6 +9,10 @@ namespace DataPipeline.Model.Attributes
 {
     using System;
 
+    /// <summary>
+    /// Represents the <see cref="DataInputAttribute"/> class.
+    /// It indicates that the method is the input of the data unit.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class DataInputAttribute : Attribute
     {

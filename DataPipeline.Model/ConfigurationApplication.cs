@@ -83,10 +83,10 @@ namespace DataPipeline.Model
                 return;
             }
 
-            Type tDelegate = sourceUnit.ValueGeneratedEvent.EventHandlerType;
-            MethodInfo miHandler = processingUnit.ValueInputMethod;
+            Type delegateType = sourceUnit.ValueGeneratedEvent.EventHandlerType;
+            MethodInfo handlerMethodInfo = processingUnit.ValueInputMethod;
 
-            Delegate d = Delegate.CreateDelegate(tDelegate, processingUnit.Instance, miHandler);
+            Delegate d = Delegate.CreateDelegate(delegateType, processingUnit.Instance, handlerMethodInfo);
 
             MethodInfo addHandler = sourceUnit.ValueGeneratedEvent.GetAddMethod();
             object[] addHandlerArgs = { d };
@@ -100,10 +100,10 @@ namespace DataPipeline.Model
                 return;
             }
 
-            Type tDelegate = firstProcessingUnit.ValueProcessedEvent.EventHandlerType;
-            MethodInfo miHandler = secondProcessingUnit.ValueInputMethod;
+            Type delegateType = firstProcessingUnit.ValueProcessedEvent.EventHandlerType;
+            MethodInfo handlerMethodInfo = secondProcessingUnit.ValueInputMethod;
 
-            Delegate d = Delegate.CreateDelegate(tDelegate, secondProcessingUnit.Instance, miHandler);
+            Delegate d = Delegate.CreateDelegate(delegateType, secondProcessingUnit.Instance, handlerMethodInfo);
 
             MethodInfo addHandler = firstProcessingUnit.ValueProcessedEvent.GetAddMethod();
             object[] addHandlerArgs = { d };

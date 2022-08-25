@@ -12,8 +12,11 @@ namespace RandomNumberGenerator
     using DataPipeline.Model.Attributes;
     using DataUnits;
 
+    /// <summary>
+    /// Represents the <see cref="RandomNumberGenerator"/> class.
+    /// </summary>
     [DataUnitInformation(
-        name:"Random number generator",
+        name: "Random number generator",
         Description = "This data unit is used to generate random numbers every two seconds.",
         InputDatatype = typeof(void),
         InputDescription = "This data unit has no data input.",
@@ -21,21 +24,39 @@ namespace RandomNumberGenerator
         OutputDescription = "Outputs a number between 1 and 100, including borders.")]
     public class RandomNumberGenerator
     {
-        private Random random;
+        /// <summary>
+        /// The <see cref="Random"/> instance used to generate random numbers.
+        /// </summary>
+        private readonly Random random;
 
+        /// <summary>
+        /// The worker <see cref="Thread"/>.
+        /// </summary>
         private Thread thread;
 
+        /// <summary>
+        /// The arguments for the worker <see cref="Thread"/>.
+        /// </summary>
         private RandomNumberGeneratorThreadArguments threadArguments;
 
-        [DataOutput]
-        public event EventHandler<ValueOutputEventArgs<int>> ValueGenerated;
-
+        /// <summary>
+        /// Initialises a new instance of the <see cref="RandomNumberGenerator"/> class.
+        /// </summary>
         public RandomNumberGenerator()
         {
             this.random = new Random();
             this.threadArguments = new RandomNumberGeneratorThreadArguments();
         }
 
+        /// <summary>
+        /// The event that gets fired when a new value got generated.
+        /// </summary>
+        [DataOutput]
+        public event EventHandler<ValueOutputEventArgs<int>> ValueGenerated;
+
+        /// <summary>
+        /// Starts this data unit.
+        /// </summary>
         public void Start()
         {
             if (this.thread != null && this.thread.IsAlive)
@@ -48,6 +69,9 @@ namespace RandomNumberGenerator
             this.thread.Start(this.threadArguments);
         }
 
+        /// <summary>
+        /// Stops this data unit.
+        /// </summary>
         public void Stop()
         {
             if (this.thread == null || !this.thread.IsAlive)
@@ -58,6 +82,10 @@ namespace RandomNumberGenerator
             this.threadArguments.Exit = true;
         }
 
+        /// <summary>
+        /// Represents the worker <see cref="Thread"/>.
+        /// </summary>
+        /// <param name="data">The given <see cref="RandomNumberGeneratorThreadArguments"/>.</param>
         private void Worker(object data)
         {
             if (!(data is RandomNumberGeneratorThreadArguments))

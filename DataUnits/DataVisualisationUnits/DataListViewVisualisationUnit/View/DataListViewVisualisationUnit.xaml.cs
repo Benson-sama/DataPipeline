@@ -1,5 +1,5 @@
 ﻿//---------------------------------------------------------------------------------
-// <copyright file="DataListViewVisualisationUnit.cs" company="FH Wiener Neustadt">
+// <copyright file="DataListViewVisualisationUnit.xaml.cs" company="FH Wiener Neustadt">
 //     Copyright (c) FH Wiener Neustadt. All rights reserved.
 // </copyright>
 // <author>Benjamin Bogner</author>
@@ -14,7 +14,7 @@ namespace DataListViewVisualisationUnit.View
     using DataUnits;
 
     /// <summary>
-    /// Interaction logic for DataListViewVisualisationUnit.xaml
+    /// Represents the <see cref="DataListViewVisualisationUnit"/> class.
     /// </summary>
     [DataUnitInformation(
         name: "DataListView Visualisation Unit",
@@ -25,21 +25,28 @@ namespace DataListViewVisualisationUnit.View
         OutputDescription = "None.")]
     public partial class DataListViewVisualisationUnit : UserControl
     {
+        /// <summary>
+        /// The <see cref="ViewModel.DataListViewVisualisationUnitVM"/> of this <see cref="DataListViewVisualisationUnit"/>.
+        /// </summary>
         private DataListViewVisualisationUnitVM dataListViewVisualisationUnitVM;
 
+        /// <summary>
+        /// Initialises a new instance of the <see cref="DataListViewVisualisationUnit"/> class.
+        /// </summary>
         public DataListViewVisualisationUnit()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.DataListViewVisualisationUnitVM = new DataListViewVisualisationUnitVM();
             this.DataContext = this.DataListViewVisualisationUnitVM;
         }
 
+        /// <summary>
+        /// Gets the <see cref="ViewModel.DataListViewVisualisationUnitVM"/> of this <see cref="DataListViewVisualisationUnit"/>.
+        /// </summary>
+        /// <value>The <see cref="ViewModel.DataListViewVisualisationUnitVM"/> of this <see cref="DataListViewVisualisationUnit"/>.</value>
         public DataListViewVisualisationUnitVM DataListViewVisualisationUnitVM
         {
-            get
-            {
-                return this.dataListViewVisualisationUnitVM;
-            }
+            get => this.dataListViewVisualisationUnitVM;
 
             private set
             {
@@ -47,8 +54,17 @@ namespace DataListViewVisualisationUnit.View
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this data unit is running.
+        /// </summary>
+        /// <value>The value indicating whether this data unit is running.</value>
         public bool IsRunning { get; private set; }
 
+        /// <summary>
+        /// Inputs a new value into this data unit if it is running.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The arguments of the event.</param>
         [DataInput]
         public void InputValue(object sender, ValueOutputEventArgs<int> e)
         {
@@ -60,11 +76,17 @@ namespace DataListViewVisualisationUnit.View
             this.dataListViewVisualisationUnitVM.InputValue(sender, e);
         }
 
+        /// <summary>
+        /// Starts this data unit.
+        /// </summary>
         public void Start()
         {
             this.IsRunning = true;
         }
 
+        /// <summary>
+        /// Stops this data unit.
+        /// </summary>
         public void Stop()
         {
             this.IsRunning = false;

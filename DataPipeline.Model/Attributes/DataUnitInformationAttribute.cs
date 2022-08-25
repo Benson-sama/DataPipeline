@@ -9,19 +9,41 @@ namespace DataPipeline.Model.Attributes
 {
     using System;
 
+    /// <summary>
+    /// Represents the <see cref="DataUnitInformationAttribute"/> class.
+    /// It is used to provide various information about a data unit.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class DataUnitInformationAttribute : Attribute
     {
+        /// <summary>
+        /// The name of the data unit.
+        /// </summary>
         private string name;
 
+        /// <summary>
+        /// The description of the data unit.
+        /// </summary>
         private string description;
 
+        /// <summary>
+        /// The <see cref="Type"/> for the data input.
+        /// </summary>
         private Type inputDataType;
 
+        /// <summary>
+        /// The description for the data input.
+        /// </summary>
         private string inputDescription;
 
+        /// <summary>
+        /// The <see cref="Type"/> for the data output.
+        /// </summary>
         private Type outputDataType;
 
+        /// <summary>
+        /// The description for the data output.
+        /// </summary>
         private string outputDescription;
 
         /// <summary>
@@ -35,6 +57,10 @@ namespace DataPipeline.Model.Attributes
             this.Name = name;
         }
 
+        /// <summary>
+        /// Gets or sets the name of the data unit.
+        /// </summary>
+        /// <value>The name of the data unit.</value>
         public string Name
         {
             get
@@ -53,6 +79,10 @@ namespace DataPipeline.Model.Attributes
             }
         }
 
+        /// <summary>
+        /// Gets or sets the description of the data unit.
+        /// </summary>
+        /// <value>The description of the data unit.</value>
         public string Description
         {
             get
@@ -71,6 +101,10 @@ namespace DataPipeline.Model.Attributes
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="Type"/> for the input data.
+        /// </summary>
+        /// <value>The <see cref="Type"/> for the input data.</value>
         public Type InputDatatype
         {
             get
@@ -84,6 +118,10 @@ namespace DataPipeline.Model.Attributes
             }
         }
 
+        /// <summary>
+        /// Gets or sets the description for the input data.
+        /// </summary>
+        /// <value>The description for the input data.</value>
         public string InputDescription
         {
             get
@@ -102,6 +140,10 @@ namespace DataPipeline.Model.Attributes
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="Type"/> for the output data.
+        /// </summary>
+        /// <value>The <see cref="Type"/> for the output data.</value>
         public Type OutputDatatype
         {
             get
@@ -115,6 +157,10 @@ namespace DataPipeline.Model.Attributes
             }
         }
 
+        /// <summary>
+        /// Gets or sets the description for the output data.
+        /// </summary>
+        /// <value>The description for the output data.</value>
         public string OutputDescription
         {
             get

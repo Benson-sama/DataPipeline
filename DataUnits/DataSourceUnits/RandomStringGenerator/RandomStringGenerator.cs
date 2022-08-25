@@ -11,6 +11,9 @@ namespace RandomStringGenerator
     using DataPipeline.Model.Attributes;
     using DataUnits;
 
+    /// <summary>
+    /// Represents the <see cref="RandomStringGenerator"/> class.
+    /// </summary>
     [DataUnitInformation(
            name: "Random string generator",
            Description = "Generates a string with random characters from A to Z.",
@@ -20,30 +23,45 @@ namespace RandomStringGenerator
            OutputDescription = "A string with a minimum length of 5 and a maximum length of 10 characters.")]
     public class RandomStringGenerator
     {
+        /// <summary>
+        /// The <see cref="Random"/> instance used to create randomised strings.
+        /// </summary>
         private Random random;
 
-        [DataOutput]
-        public event EventHandler<ValueOutputEventArgs<string>> ValueGenerated;
-
+        /// <summary>
+        /// Initialises a new instance of the <see cref="RandomStringGenerator"/> class.
+        /// </summary>
         public RandomStringGenerator()
         {
             this.random = new Random();
         }
 
+        /// <summary>
+        /// The event that gets fired when a value got generated.
+        /// </summary>
+        [DataOutput]
+        public event EventHandler<ValueOutputEventArgs<string>> ValueGenerated;
+
+        /// <summary>
+        /// Starts this data unit.
+        /// </summary>
         public void Start()
         {
-            int length = random.Next(5, 11);
+            int length = this.random.Next(5, 11);
             string value = string.Empty;
 
             for (int i = 0; i < length; i++)
             {
-                value += Convert.ToChar(random.Next(65, 91));
+                value += Convert.ToChar(this.random.Next(65, 91));
             }
 
             ValueOutputEventArgs<string> valueOutputEventArgs = new ValueOutputEventArgs<string>(value);
             this.ValueGenerated?.Invoke(this, valueOutputEventArgs);
         }
 
+        /// <summary>
+        /// Stops this data unit.
+        /// </summary>
         public void Stop()
         {
         }
