@@ -8,7 +8,8 @@
         d:DataContext="{d:DesignInstance Type=configApp:ConfigurationApplicationVM}"
         mc:Ignorable="d"
         Title="Data Pipeline © 2022 Benjamin BOGNER"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Closed="Window_Closed">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -37,7 +38,7 @@
         </ScrollViewer>
         <Grid Grid.Row="1">
             <Button x:Name="loadButton" Click="LoadButton_Click" HorizontalAlignment="Left" Content="Load" Height="25" Width="75" Margin="25 10 0 10"/>
-            <Button x:Name="stateButton" HorizontalAlignment="Left" Content="Start" Height="25" Width="75" Margin="125 10 0 10"/>
+            <Button x:Name="stateButton" Click="StateButton_Click" HorizontalAlignment="Left" Content="Start" Height="25" Width="75" Margin="125 10 0 10"/>
         </Grid>
     </Grid>
 </Window>

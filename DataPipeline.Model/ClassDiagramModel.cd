@@ -1,56 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="DataPipeline.Model.ConfigurationApplication">
-    <Position X="0.5" Y="2" Width="3.25" />
+    <Position X="0.5" Y="2" Width="7" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAAAAAgAAAAAAQAAAAAA=</HashCode>
+      <HashCode>AAAAgAAgEKAAIAAAAAAAQAAAAAAAAgAAIAAAQAAAAAA=</HashCode>
       <FileName>ConfigurationApplication.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataPipeline.Model.Extensions">
-    <Position X="0.5" Y="0.5" Width="5.75" />
+    <Position X="0.5" Y="0.5" Width="5.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Extensions.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataPipeline.Model.ReflectedDataSourceUnit">
-    <Position X="5.25" Y="5" Width="3.5" />
+    <Position X="8" Y="5" Width="3.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ReflectedDataSourceUnit.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataPipeline.Model.ReflectedDataProcessingUnit">
-    <Position X="9.75" Y="5" Width="4" />
+    <Position X="12.5" Y="5" Width="4" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAABQAAAAAA=</HashCode>
       <FileName>ReflectedDataProcessingUnit.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataPipeline.Model.ReflectedDataUnit">
-    <Position X="8" Y="0.5" Width="2.75" />
+    <Position X="10.75" Y="0.5" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAQACAAEAAgABBAAAAYQAAAAAAAAA=</HashCode>
       <FileName>ReflectedDataUnit.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataPipeline.Model.Attributes.DataInputAttribute">
-    <Position X="18.25" Y="0.5" Width="1.75" />
+    <Position X="19.25" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Attributes\DataInputAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataPipeline.Model.Attributes.DataOutputAttribute">
-    <Position X="18.25" Y="1.75" Width="1.75" />
+    <Position X="19.25" Y="1.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Attributes\DataOutputAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataPipeline.Model.Attributes.DataUnitInformationAttribute">
-    <Position X="15" Y="0.5" Width="3" />
+    <Position X="16" Y="0.5" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQAAgAAEAKAEBAAQAAAAMBAAAAAAAAAABAAA=</HashCode>
       <FileName>Attributes\DataUnitInformationAttribute.cs</FileName>

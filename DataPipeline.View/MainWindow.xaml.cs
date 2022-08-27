@@ -11,6 +11,7 @@ namespace DataPipeline.View
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Data;
     using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Shapes;
@@ -50,6 +51,27 @@ namespace DataPipeline.View
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
             this.configAppVM.LoadExtensions();
+        }
+
+        private void StateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!this.configAppVM.IsRunning)
+            {
+                this.configAppVM.Start();
+                Button button = sender as Button;
+                button.Content = "Stop";
+            }
+            else if (this.configAppVM.IsRunning)
+            {
+                this.configAppVM.Stop();
+                Button button = sender as Button;
+                button.Content = "Start";
+            }
+        }
+
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            this.configAppVM.Stop();
         }
     }
 }

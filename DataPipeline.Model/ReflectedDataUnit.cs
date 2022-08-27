@@ -100,7 +100,7 @@ namespace DataPipeline.Model
         }
 
         /// <summary>
-        /// Invokes the underlying <seealso cref="StopMethod"/> and thereby starts the data unit.
+        /// Invokes the underlying <seealso cref="StopMethod"/> and thereby stops the data unit.
         /// </summary>
         public void Stop()
         {

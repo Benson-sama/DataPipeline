@@ -70,13 +70,17 @@ namespace DataPipeline.Model
 
         public void Start()
         {
+            this.DataProcessingUnits.ForEach(x => x.Start());
+            this.DataSourceUnits.ForEach(x => x.Start());
         }
 
         public void Stop()
         {
+            this.DataSourceUnits.ForEach(x => x.Stop());
+            this.DataProcessingUnits.ForEach(x => x.Stop());
         }
 
-        private void Link(ReflectedDataSourceUnit sourceUnit, ReflectedDataProcessingUnit processingUnit)
+        public void Link(ReflectedDataSourceUnit sourceUnit, ReflectedDataProcessingUnit processingUnit)
         {
             if (!this.DataSourceUnits.Contains(sourceUnit) || !this.DataProcessingUnits.Contains(processingUnit))
             {
@@ -93,7 +97,7 @@ namespace DataPipeline.Model
             addHandler.Invoke(sourceUnit.Instance, addHandlerArgs);
         }
 
-        private void Link(ReflectedDataProcessingUnit firstProcessingUnit, ReflectedDataProcessingUnit secondProcessingUnit)
+        public void Link(ReflectedDataProcessingUnit firstProcessingUnit, ReflectedDataProcessingUnit secondProcessingUnit)
         {
             if (!this.DataProcessingUnits.Contains(firstProcessingUnit) || !this.DataProcessingUnits.Contains(secondProcessingUnit))
             {

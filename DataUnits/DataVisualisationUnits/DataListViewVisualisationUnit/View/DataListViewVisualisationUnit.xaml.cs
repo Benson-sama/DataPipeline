@@ -9,6 +9,7 @@ namespace DataListViewVisualisationUnit.View
 {
     using System;
     using System.Windows.Controls;
+    using System.Windows.Data;
     using global::DataListViewVisualisationUnit.ViewModel;
     using DataPipeline.Model.Attributes;
     using DataUnits;
@@ -17,7 +18,7 @@ namespace DataListViewVisualisationUnit.View
     /// Represents the <see cref="DataListViewVisualisationUnit"/> class.
     /// </summary>
     [DataUnitInformation(
-        name: "DataListView Visualisation Unit",
+        name: "Number ListView Visualisation Unit",
         Description = "Takes a value and adds it to the internal ListView.",
         InputDatatype = typeof(int),
         InputDescription = "Any given number.",
@@ -25,6 +26,11 @@ namespace DataListViewVisualisationUnit.View
         OutputDescription = "None.")]
     public partial class DataListViewVisualisationUnit : UserControl
     {
+        /// <summary>
+        /// The locker object for the value collection.
+        /// </summary>
+        private readonly object collectionLocker;
+
         /// <summary>
         /// The <see cref="ViewModel.DataListViewVisualisationUnitVM"/> of this <see cref="DataListViewVisualisationUnit"/>.
         /// </summary>
@@ -36,7 +42,9 @@ namespace DataListViewVisualisationUnit.View
         public DataListViewVisualisationUnit()
         {
             this.InitializeComponent();
+            this.collectionLocker = new object();
             this.DataListViewVisualisationUnitVM = new DataListViewVisualisationUnitVM();
+            BindingOperations.EnableCollectionSynchronization(this.DataListViewVisualisationUnitVM.Values, this.collectionLocker);
             this.DataContext = this.DataListViewVisualisationUnitVM;
         }
 
@@ -90,6 +98,22 @@ namespace DataListViewVisualisationUnit.View
         public void Stop()
         {
             this.IsRunning = false;
+        }
+
+        /// <summary>
+        /// Scrolls to the end of the <see cref="ScrollViewer"/> if the extent height has changed.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The arguments of the event.</param>
+        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (e.ExtentHeightChange <= 0)
+            {
+                return;
+            }
+
+            ScrollViewer sw = sender as ScrollViewer;
+            sw.ScrollToEnd();
         }
     }
 }

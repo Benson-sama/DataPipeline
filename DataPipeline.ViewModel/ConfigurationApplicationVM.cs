@@ -51,6 +51,8 @@ namespace DataPipeline.ViewModel
             }
         }
 
+        public bool IsRunning { get; private set; }
+
         /// <summary>
         /// Loads all extensions of the <see cref="ConfigurationApplication"/>.
         /// </summary>
@@ -58,6 +60,76 @@ namespace DataPipeline.ViewModel
         {
             this.configApp.LoadExtensions();
             this.LoadDVUs();
+
+            this.configApp.Link(this.configApp.DataSourceUnits.First(), this.configApp.DataProcessingUnits.First());
+            this.Link(this.configApp.DataProcessingUnits.First(), this.DataVisualisationUnits.First());
+        }
+
+        public void Link(ReflectedDataSourceUnit sourceUnit, ReflectedDataVisualisationUnit visualisationUnit)
+        {
+            if (!this.configApp.DataSourceUnits.Contains(sourceUnit) || !this.DataVisualisationUnits.Contains(visualisationUnit))
+            {
+                return;
+            }
+
+            Type delegateType = sourceUnit.ValueGeneratedEvent.EventHandlerType;
+            MethodInfo handlerMethodInfo = visualisationUnit.ValueInputMethod;
+
+            Delegate d = Delegate.CreateDelegate(delegateType, visualisationUnit.Instance, handlerMethodInfo);
+
+            MethodInfo addHandler = sourceUnit.ValueGeneratedEvent.GetAddMethod();
+            object[] addHandlerArgs = { d };
+            addHandler.Invoke(sourceUnit.Instance, addHandlerArgs);
+        }
+
+        public void Link(ReflectedDataProcessingUnit processingUnit, ReflectedDataVisualisationUnit visualisationUnit)
+        {
+            if (!this.configApp.DataProcessingUnits.Contains(processingUnit) || !this.DataVisualisationUnits.Contains(visualisationUnit))
+            {
+                return;
+            }
+
+            Type delegateType = processingUnit.ValueProcessedEvent.EventHandlerType;
+            MethodInfo handlerMethodInfo = visualisationUnit.ValueInputMethod;
+
+            Delegate d = Delegate.CreateDelegate(delegateType, visualisationUnit.Instance, handlerMethodInfo);
+
+            MethodInfo addHandler = processingUnit.ValueProcessedEvent.GetAddMethod();
+            object[] addHandlerArgs = { d };
+            addHandler.Invoke(processingUnit.Instance, addHandlerArgs);
+        }
+
+        public void Start()
+        {
+            if (this.IsRunning)
+            {
+                return;
+            }
+
+            foreach (var dVU in this.DataVisualisationUnits)
+            {
+                dVU.Start();
+            }
+
+            this.configApp.Start();
+            this.IsRunning = true;
+        }
+
+        public void Stop()
+        {
+            if (!this.IsRunning)
+            {
+                return;
+            }
+
+            this.configApp.Stop();
+
+            foreach (var dVU in this.DataVisualisationUnits)
+            {
+                dVU.Stop();
+            }
+
+            this.IsRunning = false;
         }
 
         private void LoadDVUs()

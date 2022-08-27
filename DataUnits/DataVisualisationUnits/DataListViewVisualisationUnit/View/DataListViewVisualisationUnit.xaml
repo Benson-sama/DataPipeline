@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DataListViewVisualisationUnit.View"
-             d:DesignHeight="400"
-             MinHeight="400"
+             d:DesignHeight="200"
+             d:DesignWidth="350"
+             MinHeight="250" MaxHeight="250"
+             MinWidth="350" MaxWidth="350"
              mc:Ignorable="d">
     <Border BorderBrush="Black" BorderThickness="4" Margin="5">
         <Grid>
@@ -13,12 +15,12 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Content="Data List Visualisation" FontSize="16"/>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanContentScroll="True">
+            <Label Grid.Row="0" Content="Number List Visualisation" FontSize="24" FontFamily="Segoe UI Black" BorderBrush="Black" BorderThickness="0 0 0 2"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanContentScroll="True" ScrollChanged="ScrollViewer_ScrollChanged">
                 <ItemsControl Name="itemsControl" ItemsSource="{Binding Values}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}" Margin="5 0 5 2"/>
+                            <TextBlock Text="{Binding}" Margin="10 5 5 2" FontSize="16"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
