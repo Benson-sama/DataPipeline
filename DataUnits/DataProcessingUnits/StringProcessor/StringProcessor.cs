@@ -64,7 +64,14 @@ namespace StringProcessor
                 return;
             }
 
-            this.ValueGenerated?.Invoke(this, new ValueOutputEventArgs<int>(Convert.ToInt32(e.Value)));
+            int number = 0;
+
+            foreach (var character in e.Value)
+            {
+                number += character.GetHashCode();
+            }
+
+            this.ValueGenerated?.Invoke(this, new ValueOutputEventArgs<int>(number));
         }
     }
 }

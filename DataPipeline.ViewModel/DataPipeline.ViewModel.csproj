@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="ConfigurationApplicationVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReflectedDataVisualisationUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataPipeline.Model\DataPipeline.Model.csproj">

@@ -9,12 +9,15 @@ namespace DataPipeline.Model
 {
     using System;
     using System.Reflection;
+    using DataPipeline.Model.Attributes;
 
     /// <summary>
     /// Represents the <see cref="ReflectedDataUnit"/> class.
     /// </summary>
     public abstract class ReflectedDataUnit
     {
+        private DataUnitInformationAttribute attribute;
+
         /// <summary>
         /// The <see cref="System.Type"/> of the data unit.
         /// </summary>
@@ -41,10 +44,22 @@ namespace DataPipeline.Model
         /// <param name="dataUnitType">The <see cref="System.Type"/> of the data unit.</param>
         public ReflectedDataUnit(Type dataUnitType)
         {
+            this.Attribute = dataUnitType.GetCustomAttribute<DataUnitInformationAttribute>();
             this.Type = dataUnitType;
             this.Instance = Activator.CreateInstance(this.Type);
             this.StartMethod = this.Type.GetMethod("Start");
             this.StopMethod = this.Type.GetMethod("Stop");
+        }
+
+        /// <summary>
+        /// Gets the <see cref="DataUnitInformationAttribute"/> of the data unit.
+        /// </summary>
+        /// <value>The <see cref="DataUnitInformationAttribute"/> of the data unit.</value>
+        public DataUnitInformationAttribute Attribute
+        {
+            get => this.attribute;
+
+            private set => this.attribute = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null.");
         }
 
         /// <summary>
@@ -105,6 +120,13 @@ namespace DataPipeline.Model
         public void Stop()
         {
             this.StopMethod.Invoke(this.Instance, null);
+        }
+
+        public abstract void Accept(IReflectedDataUnitVisitor reflectedDataUnitVisitor);
+
+        public override string ToString()
+        {
+            return this.Attribute.Name;
         }
     }
 }

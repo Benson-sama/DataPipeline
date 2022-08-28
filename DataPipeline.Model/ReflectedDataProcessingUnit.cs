@@ -64,5 +64,10 @@ namespace DataPipeline.Model
                 this.valueProcessedEvent = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null.");
             }
         }
+
+        public override void Accept(IReflectedDataUnitVisitor reflectedDataUnitVisitor)
+        {
+            reflectedDataUnitVisitor.Visit(this);
+        }
     }
 }

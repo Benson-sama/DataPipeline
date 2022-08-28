@@ -11,10 +11,6 @@ namespace DataPipeline.View
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Input;
-    using System.Windows.Media;
-    using System.Windows.Shapes;
     using DataPipeline.Model;
     using DataPipeline.ViewModel;
 
@@ -39,6 +35,9 @@ namespace DataPipeline.View
             this.configAppVM = new ConfigurationApplicationVM();
             this.DataContext = this.configAppVM;
             this.configAppVM.LoadExtensions();
+            this.dataUnitsListView.ItemsSource = this.configAppVM.DataUnits;
+            this.sourceDataUnitComboBox.ItemsSource = this.configAppVM.SourceDataUnits;
+            this.destinationDataUnitComboBox.ItemsSource = this.configAppVM.DestinationDataUnits;
             this.dataVisualisationUnits = this.configAppVM.DataVisualisationUnits.Select(x => x.Instance as UserControl);
             this.dataVisualisationUnitsControl.ItemsSource = this.dataVisualisationUnits;
         }
@@ -50,6 +49,13 @@ namespace DataPipeline.View
         /// <param name="e">The <see cref="RoutedEventArgs"/> of the event.</param>
         private void LoadButton_Click(object sender, RoutedEventArgs e)
         {
+            if (this.configAppVM.IsRunning)
+            {
+                MessageBox.Show("Unable to load extensions when the Data Pipeline is activated. " +
+                                "Stop it and try again.", "Error");
+                return;
+            }
+
             this.configAppVM.LoadExtensions();
         }
 
@@ -72,6 +78,71 @@ namespace DataPipeline.View
         private void Window_Closed(object sender, System.EventArgs e)
         {
             this.configAppVM.Stop();
+        }
+
+        private void LinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            ReflectedDataUnit firstUnit = this.sourceDataUnitComboBox.SelectedItem as ReflectedDataUnit;
+            ReflectedDataUnit secondUnit = this.destinationDataUnitComboBox.SelectedItem as ReflectedDataUnit;
+
+            if (firstUnit == null || secondUnit == null)
+            {
+                MessageBox.Show("Both source and destination data units need to be selected.", "Error");
+                return;
+            }
+
+            ReflectedDataUnitSelector firstSelector = new ReflectedDataUnitSelector();
+            firstUnit.Accept(firstSelector);
+            ReflectedDataUnitSelector secondSelector = new ReflectedDataUnitSelector();
+            secondUnit.Accept(secondSelector);
+
+            if (firstSelector.ReflectedDVU != null || secondSelector.ReflectedDSU != null)
+            {
+                return;
+            }
+
+            if (firstSelector.ReflectedDSU != null)
+            {
+                if (secondSelector.ReflectedDPU != null)
+                {
+                    this.configAppVM.Link(firstSelector.ReflectedDSU, secondSelector.ReflectedDPU);
+                }
+                else
+                {
+                    this.configAppVM.Link(firstSelector.ReflectedDSU, secondSelector.ReflectedDVU);
+                }
+            }
+            else
+            {
+                if (secondSelector.ReflectedDPU != null)
+                {
+                    this.configAppVM.Link(firstSelector.ReflectedDPU, secondSelector.ReflectedDPU);
+                }
+                else
+                {
+                    this.configAppVM.Link(firstSelector.ReflectedDPU, secondSelector.ReflectedDVU);
+                }
+            }
+
+            MessageBox.Show($"Linked: {firstUnit} + {secondUnit}");
+        }
+
+        private void InfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = e.Source as Button;
+            var dataUnit = button.DataContext as ReflectedDataUnit;
+            
+            if (dataUnit == null)
+            {
+                return;
+            }
+
+            MessageBox.Show($"Description: {dataUnit.Attribute.Description}\n" +
+                            $"Input datatype: {dataUnit.Attribute.InputDatatype}\n" +
+                            $"Input description: {dataUnit.Attribute.InputDescription}\n" +
+                            $"Output datatype: {dataUnit.Attribute.OutputDatatype}\n" +
+                            $"Output description: {dataUnit.Attribute.OutputDescription}\n",
+                            $"{dataUnit.Attribute.Name}");
         }
     }
 }

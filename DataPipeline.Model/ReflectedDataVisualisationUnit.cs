@@ -5,12 +5,11 @@
 // <author>Benjamin Bogner</author>
 // <summary>Contains the ReflectedDataVisualisationUnit class.</summary>
 //----------------------------------------------------------------------------------
-namespace DataPipeline.ViewModel
+namespace DataPipeline.Model
 {
     using System;
     using System.Linq;
     using System.Reflection;
-    using DataPipeline.Model;
     using DataPipeline.Model.Attributes;
 
     /// <summary>
@@ -44,6 +43,11 @@ namespace DataPipeline.ViewModel
             {
                 this.valueInputMethod = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null.");
             }
+        }
+
+        public override void Accept(IReflectedDataUnitVisitor reflectedDataUnitVisitor)
+        {
+            reflectedDataUnitVisitor.Visit(this);
         }
     }
 }

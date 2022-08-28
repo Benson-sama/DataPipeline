@@ -4,8 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataPipeline.View"
-        xmlns:configApp="clr-namespace:DataPipeline.ViewModel;assembly=DataPipeline.ViewModel"
-        d:DataContext="{d:DesignInstance Type=configApp:ConfigurationApplicationVM}"
         mc:Ignorable="d"
         Title="Data Pipeline © 2022 Benjamin BOGNER"
         WindowStartupLocation="CenterScreen"
@@ -15,18 +13,83 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto" MinHeight="30"/>
-        </Grid.RowDefinitions>
-        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Gray" BorderThickness="4" Margin="25 25 25 5">
-            <Canvas Background="LightGray">
-                <Line X1="100" X2="250" Y1="100" Y2="150" Stroke="Black" StrokeThickness="5"/>
-                <!--<Polyline StrokeThickness="3" Stroke="Black" Points="100,300 210,400 330,290 440,300"/>-->
-                <Ellipse x:Name="blueEllipse" Fill="CornflowerBlue" Canvas.Left="50" Canvas.Top="50" Width="100" Height="100"/>
-                <Ellipse x:Name="redEllipse" Fill="IndianRed" Canvas.Left="200" Canvas.Top="100" Width="100" Height="100"/>
-            </Canvas>
+        <Border Grid.Row="0" Grid.Column="0" CornerRadius="15" Background="#EE6983"
+                BorderBrush="#850E35" BorderThickness="4" Margin="25 25 25 25">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto" MinHeight="30"/>
+                </Grid.RowDefinitions>
+                <Label Content="Configurator" Foreground="#FFF5E4" FontSize="26"
+                       FontFamily="Segoe UI Black" Margin="5 0 0 0"/>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Data Units" Foreground="#FFF5E4" FontSize="20" Margin="10 0 0 0" FontWeight="Bold"/>
+                    <Border Grid.Row="1" Background="#FFC4C4" CornerRadius="10" Margin="10 0 10 0">
+                        <ScrollViewer MaxHeight="100" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl x:Name="dataUnitsListView" ScrollViewer.CanContentScroll="True">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Margin="15 0 0 0">
+                                            <Ellipse Width="10" Height="10" Fill="White"/>
+                                            <Label Content="{Binding}" FontSize="14" Foreground="#850E35"/>
+                                            <Button Content="Info" Foreground="#850E35" FontSize="12" Width="40" Height="20" Click="InfoButton_Click" Background="#FFF5E4">
+                                                <Button.Resources>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="CornerRadius" Value="5"/>
+                                                    </Style>
+                                                </Button.Resources>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Margin="10 5 5 5">
+                        <Label Content="First Data Unit" Foreground="#FFF5E4" FontSize="14"/>
+                        <ComboBox x:Name="sourceDataUnitComboBox" Height="30" VerticalAlignment="Top"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="5">
+                        <Label Grid.Column="1" Content="Second Data Unit" Foreground="#FFF5E4" FontSize="14"/>
+                        <ComboBox x:Name="destinationDataUnitComboBox" Grid.Column="1" Height="30" VerticalAlignment="Top"/>
+                    </StackPanel>
+                    <Button Grid.Column="2" Content="Link" Background="#FFF5E4" Width="40" Height="30"
+                            VerticalAlignment="Top" Click="LinkButton_Click"
+                            Margin="5 33 10 5"/>
+                </Grid>
+                <Border Grid.Row="3" Background="#FFC4C4" Margin="10" CornerRadius="10">
+                    
+                </Border>
+                <Grid Grid.Row="4">
+                    <Border BorderBrush="#850E35" BorderThickness="0 3 0 0">
+                        <Grid>
+                            <Button x:Name="loadButton" Background="#FFF5E4" Click="LoadButton_Click" HorizontalAlignment="Left"
+                                    Content="Load" Height="25" Width="75" Margin="25 10 0 10"/>
+                            <Button x:Name="stateButton" Background="#FFF5E4" Click="StateButton_Click" HorizontalAlignment="Left"
+                                    Content="Start" Height="25" Width="75" Margin="125 10 0 10"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
         </Border>
+        <!--Data Visualisation Extensions-->
         <ScrollViewer Grid.Column="1">
             <ItemsControl x:Name="dataVisualisationUnitsControl">
                 <ItemsControl.ItemsPanel>
@@ -36,9 +99,5 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-        <Grid Grid.Row="1">
-            <Button x:Name="loadButton" Click="LoadButton_Click" HorizontalAlignment="Left" Content="Load" Height="25" Width="75" Margin="25 10 0 10"/>
-            <Button x:Name="stateButton" Click="StateButton_Click" HorizontalAlignment="Left" Content="Start" Height="25" Width="75" Margin="125 10 0 10"/>
-        </Grid>
     </Grid>
 </Window>
