@@ -7,6 +7,7 @@
 //-------------------------------------------------------------------
 namespace DataPipeline.View
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows;
@@ -24,6 +25,9 @@ namespace DataPipeline.View
         /// </summary>
         private readonly ConfigurationApplicationVM configAppVM;
 
+        /// <summary>
+        /// The data visualisation units of the <see cref="MainWindow"/>.
+        /// </summary>
         private IEnumerable<UserControl> dataVisualisationUnits;
 
         /// <summary>
@@ -41,6 +45,30 @@ namespace DataPipeline.View
             this.dataVisualisationUnits = this.configAppVM.DataVisualisationUnits.Select(x => x.Instance as UserControl);
             this.dataVisualisationUnitsControl.ItemsSource = this.dataVisualisationUnits;
             this.connectionsListView.DataContext = this.configAppVM.Connections;
+        }
+
+        /// <summary>
+        /// Shows the information of the selected <see cref="ReflectedDataUnit"/> in a <see cref="MessageBox"/>.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> of the event.</param>
+        private void InfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = e.Source as Button;
+            var dataUnit = button.DataContext as ReflectedDataUnit;
+
+            if (dataUnit == null)
+            {
+                return;
+            }
+
+            MessageBox.Show(
+                $"Description: {dataUnit.Attribute.Description}\n" +
+                $"Input datatype: {dataUnit.Attribute.InputDatatype}\n" +
+                $"Input description: {dataUnit.Attribute.InputDescription}\n" +
+                $"Output datatype: {dataUnit.Attribute.OutputDatatype}\n" +
+                $"Output description: {dataUnit.Attribute.OutputDescription}\n",
+                $"{dataUnit.Attribute.Name}");
         }
 
         /// <summary>
@@ -63,6 +91,11 @@ namespace DataPipeline.View
             this.configAppVM.LoadExtensions();
         }
 
+        /// <summary>
+        /// Toggles the state of the <see cref="ConfigurationApplicationVM"/>.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The arguments of the event.</param>
         private void StateButton_Click(object sender, RoutedEventArgs e)
         {
             if (!this.configAppVM.IsRunning)
@@ -79,88 +112,37 @@ namespace DataPipeline.View
             }
         }
 
-        private void Window_Closed(object sender, System.EventArgs e)
+        /// <summary>
+        /// Ensures that the <see cref="ConfigurationApplicationVM"/> is stopped when closing the <see cref="MainWindow"/>.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The arguments of the event.</param>
+        private void Window_Closed(object sender, EventArgs e)
         {
             this.configAppVM.Stop();
         }
 
         private void LinkButton_Click(object sender, RoutedEventArgs e)
         {
-            ReflectedDataUnit firstUnit = this.sourceDataUnitComboBox.SelectedItem as ReflectedDataUnit;
-            ReflectedDataUnit secondUnit = this.destinationDataUnitComboBox.SelectedItem as ReflectedDataUnit;
+            ReflectedDataUnit firstDU = this.sourceDataUnitComboBox.SelectedItem as ReflectedDataUnit;
+            ReflectedDataUnit secondDU = this.destinationDataUnitComboBox.SelectedItem as ReflectedDataUnit;
 
-            if (firstUnit == null || secondUnit == null)
+            if (firstDU == null || secondDU == null)
             {
                 MessageBox.Show("Both source and destination data units need to be selected.", "Error");
                 return;
             }
 
-            ReflectedDataUnitSelector firstSelector = new ReflectedDataUnitSelector();
-            firstUnit.Accept(firstSelector);
-            ReflectedDataUnitSelector secondSelector = new ReflectedDataUnitSelector();
-            secondUnit.Accept(secondSelector);
-
-            if (firstSelector.ReflectedDVU != null || secondSelector.ReflectedDSU != null)
+            if (this.configAppVM.Link(firstDU, secondDU))
             {
-                MessageBox.Show("Source unit cannot be a DVU and destination unit cannot be a DSU.", "Error");
-                return;
-            }
-
-            if (this.TryLink(firstSelector, secondSelector))
-            {
-                MessageBox.Show($"Successfully linked: {firstUnit} + {secondUnit}");
+                MessageBox.Show($"Successfully linked: {firstDU} + {secondDU}");
             }
             else
             {
                 MessageBox.Show(
-                    $"Unable to link: {firstUnit} + {secondUnit}\n" +
-                    $"There may be already an existing connection, or datatypes are not compatible.");
+                       $"Unable to link: {firstDU} + {secondDU}\n" +
+                       $"There may be already an existing connection, or datatypes are not compatible.");
             }
-        }
-
-        private bool TryLink(ReflectedDataUnitSelector firstSelector, ReflectedDataUnitSelector secondSelector)
-        {
-            if (firstSelector.ReflectedDSU != null)
-            {
-                if (secondSelector.ReflectedDPU != null)
-                {
-                    return this.configAppVM.Link(firstSelector.ReflectedDSU, secondSelector.ReflectedDPU);
-                }
-                else
-                {
-                    return this.configAppVM.Link(firstSelector.ReflectedDSU, secondSelector.ReflectedDVU);
-                }
-            }
-            else
-            {
-                if (secondSelector.ReflectedDPU != null)
-                {
-                    return this.configAppVM.Link(firstSelector.ReflectedDPU, secondSelector.ReflectedDPU);
-                }
-                else
-                {
-                    return this.configAppVM.Link(firstSelector.ReflectedDPU, secondSelector.ReflectedDVU);
-                }
-            }
-        }
-
-        private void InfoButton_Click(object sender, RoutedEventArgs e)
-        {
-            var button = e.Source as Button;
-            var dataUnit = button.DataContext as ReflectedDataUnit;
-            
-            if (dataUnit == null)
-            {
-                return;
-            }
-
-            MessageBox.Show(
-                $"Description: {dataUnit.Attribute.Description}\n" +
-                $"Input datatype: {dataUnit.Attribute.InputDatatype}\n" +
-                $"Input description: {dataUnit.Attribute.InputDescription}\n" +
-                $"Output datatype: {dataUnit.Attribute.OutputDatatype}\n" +
-                $"Output description: {dataUnit.Attribute.OutputDescription}\n",
-                $"{dataUnit.Attribute.Name}");
         }
     }
 }

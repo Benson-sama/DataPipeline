@@ -25,14 +25,24 @@ namespace DataPipeline.ViewModel
         /// </summary>
         private readonly ConfigurationApplication configApp;
 
-        private List<Type> loadedTypes;
-
+        /// <summary>
+        /// The data units of the <see cref="ConfigurationApplicationVM"/>.
+        /// </summary>
         private ObservableCollection<ReflectedDataUnit> dataUnits;
 
+        /// <summary>
+        /// The data units that can output values.
+        /// </summary>
         private ObservableCollection<ReflectedDataUnit> sourceDataUnits;
 
+        /// <summary>
+        /// The data units that can take input values.
+        /// </summary>
         private ObservableCollection<ReflectedDataUnit> destinationDataUnits;
 
+        /// <summary>
+        /// The created connections between data units.
+        /// </summary>
         private ObservableCollection<KeyValuePair<ReflectedDataUnit, ReflectedDataUnit>> connections;
 
         /// <summary>
@@ -42,23 +52,22 @@ namespace DataPipeline.ViewModel
         {
             this.configApp = new ConfigurationApplication();
             this.configApp.ConnectionsChanged += this.ConfigApp_ConnectionsChanged;
-            this.LoadedTypes = new List<Type>();
             this.DataUnits = new ObservableCollection<ReflectedDataUnit>();
             this.SourceDataUnits = new ObservableCollection<ReflectedDataUnit>();
             this.DestinationDataUnits = new ObservableCollection<ReflectedDataUnit>();
             this.Connections = new ObservableCollection<KeyValuePair<ReflectedDataUnit, ReflectedDataUnit>>(this.configApp.Connections);
         }
 
-        public List<Type> LoadedTypes
-        {
-            get => this.loadedTypes;
+        /// <summary>
+        /// Gets the loaded <see cref="Type"/> collection of the underlying <see cref="ConfigurationApplication"/>.
+        /// </summary>
+        /// <value>The loaded <see cref="Type"/> collection of the underlying <see cref="ConfigurationApplication"/>.</value>
+        public List<Type> LoadedTypes => this.configApp.LoadedTypes;
 
-            private set
-            {
-                this.loadedTypes = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null.");
-            }
-        }
-
+        /// <summary>
+        /// Gets the <see cref="ReflectedDataUnit"/> instances of this <see cref="ConfigurationApplicationVM"/>.
+        /// </summary>
+        /// <value>The <see cref="ReflectedDataUnit"/> instances of this <see cref="ConfigurationApplicationVM"/>.</value>
         public ObservableCollection<ReflectedDataUnit> DataUnits
         {
             get => this.dataUnits;
@@ -69,6 +78,10 @@ namespace DataPipeline.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="ReflectedDataUnit"/> instances of this <see cref="ConfigurationApplicationVM"/> that can output values.
+        /// </summary>
+        /// <value>The <see cref="ReflectedDataUnit"/> instances of this <see cref="ConfigurationApplicationVM"/> that can output values.</value>
         public ObservableCollection<ReflectedDataUnit> SourceDataUnits
         {
             get => this.sourceDataUnits;
@@ -79,6 +92,10 @@ namespace DataPipeline.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="ReflectedDataUnit"/> instances of this <see cref="ConfigurationApplicationVM"/> that can take input values.
+        /// </summary>
+        /// <value>The <see cref="ReflectedDataUnit"/> instances of this <see cref="ConfigurationApplicationVM"/> that can take input values.</value>
         public ObservableCollection<ReflectedDataUnit> DestinationDataUnits
         {
             get => this.destinationDataUnits;
@@ -89,11 +106,21 @@ namespace DataPipeline.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="ReflectedDataVisualisationUnit"/> collection
+        /// from the underlying <see cref="ConfigurationApplication"/>.
+        /// </summary>
+        /// <value>The <see cref="ReflectedDataVisualisationUnit"/> collection
+        /// from the underlying <see cref="ConfigurationApplication"/>.</value>
         public IEnumerable<ReflectedDataVisualisationUnit> DataVisualisationUnits
         {
             get => this.configApp.DataVisualisationUnits;
         }
 
+        /// <summary>
+        /// Gets the created connections between data units.
+        /// </summary>
+        /// <value>The created connections between data units.</value>
         public ObservableCollection<KeyValuePair<ReflectedDataUnit, ReflectedDataUnit>> Connections
         {
             get => this.connections;
@@ -104,7 +131,11 @@ namespace DataPipeline.ViewModel
             }
         }
 
-        public bool IsRunning { get; private set; }
+        /// <summary>
+        /// Gets a value indicating whether the underlying <see cref="ConfigurationApplication"/> is running.
+        /// </summary>
+        /// <value>The value indicating whether the underlying <see cref="ConfigurationApplication"/> is running.</value>
+        public bool IsRunning => this.configApp.IsRunning;
 
         /// <summary>
         /// Loads all extensions of the <see cref="ConfigurationApplication"/>.
@@ -130,48 +161,32 @@ namespace DataPipeline.ViewModel
             this.configApp.DataVisualisationUnits.ToList().ForEach(x => this.DestinationDataUnits.Add(x));
         }
 
-        public bool Link(ReflectedDataSourceUnit sourceUnit, ReflectedDataProcessingUnit processingUnit)
+        public bool Link(ReflectedDataUnit firstDU, ReflectedDataUnit secondDU)
         {
-            return this.configApp.Link(sourceUnit, processingUnit);
+            return this.configApp.Link(firstDU, secondDU);
         }
 
-        public bool Link(ReflectedDataSourceUnit sourceUnit, ReflectedDataVisualisationUnit visualisationUnit)
-        {
-            return this.configApp.Link(sourceUnit, visualisationUnit);
-        }
-
-        public bool Link(ReflectedDataProcessingUnit firstProcessingUnit, ReflectedDataProcessingUnit secondProcessingUnit)
-        {
-            return this.configApp.Link(firstProcessingUnit, secondProcessingUnit);
-        }
-
-        public bool Link(ReflectedDataProcessingUnit processingUnit, ReflectedDataVisualisationUnit visualisationUnit)
-        {
-            return this.configApp.Link(processingUnit, visualisationUnit);
-        }
-
+        /// <summary>
+        /// Starts the underlying <see cref="ConfigurationApplication"/>.
+        /// </summary>
         public void Start()
         {
-            if (this.IsRunning)
-            {
-                return;
-            }
-
             this.configApp.Start();
-            this.IsRunning = true;
         }
 
+        /// <summary>
+        /// Stops the underlying <see cref="ConfigurationApplication"/>.
+        /// </summary>
         public void Stop()
         {
-            if (!this.IsRunning)
-            {
-                return;
-            }
-
             this.configApp.Stop();
-            this.IsRunning = false;
         }
 
+        /// <summary>
+        /// Updates the collection of created connections of this <see cref="ConfigurationApplicationVM"/>.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The arguments of the event.</param>
         private void ConfigApp_ConnectionsChanged(object sender, ConnectionsChangedEventArgs e)
         {
             switch (e.Change)
@@ -185,26 +200,6 @@ namespace DataPipeline.ViewModel
                 default:
                     throw new ArgumentOutOfRangeException($"The specified change operation: \"{e.Change}\" is not supported.");
             }
-        }
-
-        private List<Assembly> LoadAssemblies(IEnumerable<string> dataVisualisationUnitFiles)
-        {
-            List<Assembly> loadedAssemblies = new List<Assembly>();
-
-            foreach (var file in dataVisualisationUnitFiles)
-            {
-                try
-                {
-                    Assembly loadedAssembly = Assembly.LoadFrom(file);
-                    loadedAssemblies.Add(loadedAssembly);
-                }
-                catch (Exception)
-                {
-                    // Could not load assembly.
-                }
-            }
-
-            return loadedAssemblies;
         }
     }
 }

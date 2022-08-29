@@ -152,9 +152,15 @@ namespace DataPipeline.Model
         /// </summary>
         public void Start()
         {
+            if (this.IsRunning)
+            {
+                return;
+            }
+
             this.DataVisualisationUnits.ForEach(x => x.Start());
             this.DataProcessingUnits.ForEach(x => x.Start());
             this.DataSourceUnits.ForEach(x => x.Start());
+            this.IsRunning = true;
         }
 
         /// <summary>
@@ -162,9 +168,43 @@ namespace DataPipeline.Model
         /// </summary>
         public void Stop()
         {
+            if (!this.IsRunning)
+            {
+                return;
+            }
+
             this.DataSourceUnits.ForEach(x => x.Stop());
             this.DataProcessingUnits.ForEach(x => x.Stop());
             this.DataVisualisationUnits.ForEach(x => x.Stop());
+            this.IsRunning = false;
+        }
+
+        public bool Link(ReflectedDataUnit firstDU, ReflectedDataUnit secondDU)
+        {
+            ReflectedDataUnitSelector firstSelector = new ReflectedDataUnitSelector();
+            firstDU.Accept(firstSelector);
+            ReflectedDataUnitSelector secondSelector = new ReflectedDataUnitSelector();
+            secondDU.Accept(secondSelector);
+
+            // Source unit cannot be a DVU and destination unit cannot be a DSU.
+            if (firstSelector.ReflectedDVU != null || secondSelector.ReflectedDSU != null)
+            {
+                return false;
+            }
+
+            // Link based on combination of actual data units.
+            if (firstSelector.ReflectedDSU != null)
+            {
+                return secondSelector.ReflectedDPU != null
+                    ? this.Link(firstSelector.ReflectedDSU, secondSelector.ReflectedDPU)
+                    : this.Link(firstSelector.ReflectedDSU, secondSelector.ReflectedDVU);
+            }
+            else
+            {
+                return secondSelector.ReflectedDPU != null
+                    ? this.Link(firstSelector.ReflectedDPU, secondSelector.ReflectedDPU)
+                    : this.Link(firstSelector.ReflectedDPU, secondSelector.ReflectedDVU);
+            }
         }
 
         public bool Link(ReflectedDataSourceUnit dSU, ReflectedDataProcessingUnit dPU)
