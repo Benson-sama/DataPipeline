@@ -44,15 +44,16 @@
     <Compile Include="Attributes\DataInputAttribute.cs" />
     <Compile Include="Attributes\DataOutputAttribute.cs" />
     <Compile Include="Attributes\DataUnitInformationAttribute.cs" />
-    <Compile Include="IReflectedDataUnitVisitor.cs" />
-    <Compile Include="ReflectedDataProcessingUnit.cs" />
-    <Compile Include="ReflectedDataSourceUnit.cs" />
+    <Compile Include="ConnectionsChangedEventArgs.cs" />
+    <Compile Include="ReflectedDataUnits\IReflectedDataUnitVisitor.cs" />
+    <Compile Include="ReflectedDataUnits\ReflectedDataProcessingUnit.cs" />
+    <Compile Include="ReflectedDataUnits\ReflectedDataSourceUnit.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ConfigurationApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReflectedDataUnit.cs" />
-    <Compile Include="ReflectedDataUnitSelector.cs" />
-    <Compile Include="ReflectedDataVisualisationUnit.cs" />
+    <Compile Include="ReflectedDataUnits\ReflectedDataUnit.cs" />
+    <Compile Include="ReflectedDataUnits\ReflectedDataUnitSelector.cs" />
+    <Compile Include="ReflectedDataUnits\ReflectedDataVisualisationUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagramModel.cd" />

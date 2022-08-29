@@ -5,7 +5,7 @@
 // <author>Benjamin Bogner</author>
 // <summary>Contains the ReflectedDataVisualisationUnit class.</summary>
 //----------------------------------------------------------------------------------
-namespace DataPipeline.Model
+namespace DataPipeline.Model.ReflectedDataUnits
 {
     using System;
     using System.Linq;
@@ -45,6 +45,10 @@ namespace DataPipeline.Model
             }
         }
 
+        /// <summary>
+        /// Accepts a <see cref="IReflectedDataUnitVisitor"/> that performs specific actions on this <see cref="ReflectedDataVisualisationUnit"/>.
+        /// </summary>
+        /// <param name="reflectedDataUnitVisitor">The accepted <see cref="IReflectedDataUnitVisitor"/>.</param>
         public override void Accept(IReflectedDataUnitVisitor reflectedDataUnitVisitor)
         {
             reflectedDataUnitVisitor.Visit(this);

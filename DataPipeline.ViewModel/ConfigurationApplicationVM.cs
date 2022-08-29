@@ -10,10 +10,10 @@ namespace DataPipeline.ViewModel
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.IO;
     using System.Linq;
     using System.Reflection;
     using DataPipeline.Model;
+    using DataPipeline.Model.ReflectedDataUnits;
 
     /// <summary>
     /// Represents the <see cref="ConfigurationApplicationVM"/> class.
@@ -33,7 +33,7 @@ namespace DataPipeline.ViewModel
 
         private ObservableCollection<ReflectedDataUnit> destinationDataUnits;
 
-        private ObservableCollection<ReflectedDataVisualisationUnit> dataVisualisationUnits;
+        private ObservableCollection<KeyValuePair<ReflectedDataUnit, ReflectedDataUnit>> connections;
 
         /// <summary>
         /// Initialises a new instance of the <see cref="ConfigurationApplicationVM"/> class.
@@ -41,11 +41,12 @@ namespace DataPipeline.ViewModel
         public ConfigurationApplicationVM()
         {
             this.configApp = new ConfigurationApplication();
+            this.configApp.ConnectionsChanged += this.ConfigApp_ConnectionsChanged;
             this.LoadedTypes = new List<Type>();
             this.DataUnits = new ObservableCollection<ReflectedDataUnit>();
             this.SourceDataUnits = new ObservableCollection<ReflectedDataUnit>();
             this.DestinationDataUnits = new ObservableCollection<ReflectedDataUnit>();
-            this.DataVisualisationUnits = new ObservableCollection<ReflectedDataVisualisationUnit>();
+            this.Connections = new ObservableCollection<KeyValuePair<ReflectedDataUnit, ReflectedDataUnit>>(this.configApp.Connections);
         }
 
         public List<Type> LoadedTypes
@@ -78,16 +79,6 @@ namespace DataPipeline.ViewModel
             }
         }
 
-        public ObservableCollection<ReflectedDataVisualisationUnit> DataVisualisationUnits
-        {
-            get => this.dataVisualisationUnits;
-
-            private set
-            {
-                this.dataVisualisationUnits = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null.");
-            }
-        }
-
         public ObservableCollection<ReflectedDataUnit> DestinationDataUnits
         {
             get => this.destinationDataUnits;
@@ -95,6 +86,21 @@ namespace DataPipeline.ViewModel
             private set
             {
                 this.destinationDataUnits = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null.");
+            }
+        }
+
+        public IEnumerable<ReflectedDataVisualisationUnit> DataVisualisationUnits
+        {
+            get => this.configApp.DataVisualisationUnits;
+        }
+
+        public ObservableCollection<KeyValuePair<ReflectedDataUnit, ReflectedDataUnit>> Connections
+        {
+            get => this.connections;
+
+            private set
+            {
+                this.connections = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null");
             }
         }
 
@@ -106,13 +112,12 @@ namespace DataPipeline.ViewModel
         public void LoadExtensions()
         {
             this.configApp.LoadExtensions();
-            this.LoadDVUs();
 
             // Set up collection for data unit information.
             this.DataUnits.Clear();
             this.configApp.DataSourceUnits.ForEach(x => this.DataUnits.Add(x));
             this.configApp.DataProcessingUnits.ForEach(x => this.DataUnits.Add(x));
-            this.DataVisualisationUnits.ToList().ForEach(x => this.DataUnits.Add(x));
+            this.configApp.DataVisualisationUnits.ToList().ForEach(x => this.DataUnits.Add(x));
 
             // Set up collection for linking the first data unit.
             this.SourceDataUnits.Clear();
@@ -122,7 +127,7 @@ namespace DataPipeline.ViewModel
             // Set up collection for linking the second data unit.
             this.DestinationDataUnits.Clear();
             this.configApp.DataProcessingUnits.ForEach(x => this.DestinationDataUnits.Add(x));
-            this.DataVisualisationUnits.ToList().ForEach(x => this.DestinationDataUnits.Add(x));
+            this.configApp.DataVisualisationUnits.ToList().ForEach(x => this.DestinationDataUnits.Add(x));
         }
 
         public bool Link(ReflectedDataSourceUnit sourceUnit, ReflectedDataProcessingUnit processingUnit)
@@ -130,61 +135,19 @@ namespace DataPipeline.ViewModel
             return this.configApp.Link(sourceUnit, processingUnit);
         }
 
+        public bool Link(ReflectedDataSourceUnit sourceUnit, ReflectedDataVisualisationUnit visualisationUnit)
+        {
+            return this.configApp.Link(sourceUnit, visualisationUnit);
+        }
+
         public bool Link(ReflectedDataProcessingUnit firstProcessingUnit, ReflectedDataProcessingUnit secondProcessingUnit)
         {
             return this.configApp.Link(firstProcessingUnit, secondProcessingUnit);
         }
 
-        public bool Link(ReflectedDataSourceUnit sourceUnit, ReflectedDataVisualisationUnit visualisationUnit)
-        {
-            if (!this.configApp.DataSourceUnits.Contains(sourceUnit) || !this.DataVisualisationUnits.Contains(visualisationUnit))
-            {
-                return false;
-            }
-
-            try
-            {
-                Type delegateType = sourceUnit.ValueGeneratedEvent.EventHandlerType;
-                MethodInfo handlerMethodInfo = visualisationUnit.ValueInputMethod;
-
-                Delegate d = Delegate.CreateDelegate(delegateType, visualisationUnit.Instance, handlerMethodInfo);
-
-                MethodInfo addHandler = sourceUnit.ValueGeneratedEvent.GetAddMethod();
-                object[] addHandlerArgs = { d };
-                addHandler.Invoke(sourceUnit.Instance, addHandlerArgs);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
         public bool Link(ReflectedDataProcessingUnit processingUnit, ReflectedDataVisualisationUnit visualisationUnit)
         {
-            if (!this.configApp.DataProcessingUnits.Contains(processingUnit) || !this.DataVisualisationUnits.Contains(visualisationUnit))
-            {
-                return false;
-            }
-
-            try
-            {
-                Type delegateType = processingUnit.ValueProcessedEvent.EventHandlerType;
-                MethodInfo handlerMethodInfo = visualisationUnit.ValueInputMethod;
-
-                Delegate d = Delegate.CreateDelegate(delegateType, visualisationUnit.Instance, handlerMethodInfo);
-
-                MethodInfo addHandler = processingUnit.ValueProcessedEvent.GetAddMethod();
-                object[] addHandlerArgs = { d };
-                addHandler.Invoke(processingUnit.Instance, addHandlerArgs);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            return this.configApp.Link(processingUnit, visualisationUnit);
         }
 
         public void Start()
@@ -192,11 +155,6 @@ namespace DataPipeline.ViewModel
             if (this.IsRunning)
             {
                 return;
-            }
-
-            foreach (var dVU in this.DataVisualisationUnits)
-            {
-                dVU.Start();
             }
 
             this.configApp.Start();
@@ -211,39 +169,21 @@ namespace DataPipeline.ViewModel
             }
 
             this.configApp.Stop();
-
-            foreach (var dVU in this.DataVisualisationUnits)
-            {
-                dVU.Stop();
-            }
-
             this.IsRunning = false;
         }
 
-        private void LoadDVUs()
+        private void ConfigApp_ConnectionsChanged(object sender, ConnectionsChangedEventArgs e)
         {
-            var dataVisualisationUnitFiles = Directory.EnumerateFiles("DVU", "*.dll", SearchOption.TopDirectoryOnly);
-            dataVisualisationUnitFiles = dataVisualisationUnitFiles.Concat(Directory.EnumerateFiles("DVU", "*.exe", SearchOption.TopDirectoryOnly)).ToList();
-
-            List<Assembly> loadedAssemblies = this.LoadAssemblies(dataVisualisationUnitFiles);
-            var dataProcessingUnitTypes = loadedAssemblies.GetDataUnitTypes();
-
-            foreach (var type in dataProcessingUnitTypes)
+            switch (e.Change)
             {
-                if (this.LoadedTypes.Contains(type))
-                {
-                    continue;
-                }
-
-                try
-                {
-                    this.DataVisualisationUnits.Add(new ReflectedDataVisualisationUnit(type));
-                    this.LoadedTypes.Add(type);
-                }
-                catch (Exception)
-                {
-                    // Data Visualisation Unit does not meet the requirements.
-                }
+                case "Add":
+                    this.Connections.Add(e.KeyValuePair);
+                    break;
+                case "Remove":
+                    this.Connections.Remove(e.KeyValuePair);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException($"The specified change operation: \"{e.Change}\" is not supported.");
             }
         }
 

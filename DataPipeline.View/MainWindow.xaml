@@ -13,6 +13,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <!--Configurator-->
         <Border Grid.Row="0" Grid.Column="0" CornerRadius="15" Background="#EE6983"
                 BorderBrush="#850E35" BorderThickness="4" Margin="25 25 25 25">
             <Grid>
@@ -25,6 +26,7 @@
                 </Grid.RowDefinitions>
                 <Label Content="Configurator" Foreground="#FFF5E4" FontSize="26"
                        FontFamily="Segoe UI Black" Margin="5 0 0 0"/>
+                <!--Data Units-->
                 <Grid Grid.Row="1">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -32,7 +34,7 @@
                     </Grid.RowDefinitions>
                     <Label Content="Data Units" Foreground="#FFF5E4" FontSize="20" Margin="10 0 0 0" FontWeight="Bold"/>
                     <Border Grid.Row="1" Background="#FFC4C4" CornerRadius="10" Margin="10 0 10 0">
-                        <ScrollViewer MaxHeight="100" VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
                             <ItemsControl x:Name="dataUnitsListView" ScrollViewer.CanContentScroll="True">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -53,6 +55,7 @@
                         </ScrollViewer>
                     </Border>
                 </Grid>
+                <!--Data Units Linker-->
                 <Grid Grid.Row="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -74,9 +77,23 @@
                             VerticalAlignment="Top" Click="LinkButton_Click"
                             Margin="5 33 10 5"/>
                 </Grid>
+                <!--Connections-->
                 <Border Grid.Row="3" Background="#FFC4C4" Margin="10" CornerRadius="10">
-                    
+                    <ScrollViewer MaxHeight="400" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top">
+                        <ItemsControl x:Name="connectionsListView" ScrollViewer.CanContentScroll="True" ItemsSource="{Binding}" Margin="0 10 0 0">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="15 0 0 0">
+                                        <Label Content="{Binding Key}" FontSize="14" Foreground="#850E35"/>
+                                        <Label Content="->" FontSize="14" Foreground="#850E35"/>
+                                        <Label Content="{Binding Value}" FontSize="14" Foreground="#850E35"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Border>
+                <!--State Buttons-->
                 <Grid Grid.Row="4">
                     <Border BorderBrush="#850E35" BorderThickness="0 3 0 0">
                         <Grid>

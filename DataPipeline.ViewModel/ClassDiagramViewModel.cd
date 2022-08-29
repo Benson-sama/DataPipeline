@@ -3,15 +3,8 @@
   <Class Name="DataPipeline.ViewModel.ConfigurationApplicationVM">
     <Position X="0.5" Y="0.5" Width="6.5" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAECAAAAAAAAAAAAAAAAAAAgAAIQAAYAAAAAA=</HashCode>
+      <HashCode>CAAgIAAAMCAAAAQAAAgAYAAIAAAAAgBAIQAAYAAAAAA=</HashCode>
       <FileName>ConfigurationApplicationVM.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DataPipeline.ViewModel.ReflectedDataVisualisationUnit">
-    <Position X="7.25" Y="0.5" Width="4.25" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAA=</HashCode>
-      <FileName>ReflectedDataVisualisationUnit.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

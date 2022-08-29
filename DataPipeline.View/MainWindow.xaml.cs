@@ -11,7 +11,7 @@ namespace DataPipeline.View
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
-    using DataPipeline.Model;
+    using DataPipeline.Model.ReflectedDataUnits;
     using DataPipeline.ViewModel;
 
     /// <summary>
@@ -40,6 +40,7 @@ namespace DataPipeline.View
             this.destinationDataUnitComboBox.ItemsSource = this.configAppVM.DestinationDataUnits;
             this.dataVisualisationUnits = this.configAppVM.DataVisualisationUnits.Select(x => x.Instance as UserControl);
             this.dataVisualisationUnitsControl.ItemsSource = this.dataVisualisationUnits;
+            this.connectionsListView.DataContext = this.configAppVM.Connections;
         }
 
         /// <summary>
@@ -51,8 +52,11 @@ namespace DataPipeline.View
         {
             if (this.configAppVM.IsRunning)
             {
-                MessageBox.Show("Unable to load extensions when the Data Pipeline is activated. " +
-                                "Stop it and try again.", "Error");
+                MessageBox.Show(
+                    "Unable to load extensions when the Data Pipeline is activated. " +
+                    "Stop it and try again.",
+                    "Error");
+
                 return;
             }
 
@@ -98,33 +102,46 @@ namespace DataPipeline.View
 
             if (firstSelector.ReflectedDVU != null || secondSelector.ReflectedDSU != null)
             {
+                MessageBox.Show("Source unit cannot be a DVU and destination unit cannot be a DSU.", "Error");
                 return;
             }
 
+            if (this.TryLink(firstSelector, secondSelector))
+            {
+                MessageBox.Show($"Successfully linked: {firstUnit} + {secondUnit}");
+            }
+            else
+            {
+                MessageBox.Show(
+                    $"Unable to link: {firstUnit} + {secondUnit}\n" +
+                    $"There may be already an existing connection, or datatypes are not compatible.");
+            }
+        }
+
+        private bool TryLink(ReflectedDataUnitSelector firstSelector, ReflectedDataUnitSelector secondSelector)
+        {
             if (firstSelector.ReflectedDSU != null)
             {
                 if (secondSelector.ReflectedDPU != null)
                 {
-                    this.configAppVM.Link(firstSelector.ReflectedDSU, secondSelector.ReflectedDPU);
+                    return this.configAppVM.Link(firstSelector.ReflectedDSU, secondSelector.ReflectedDPU);
                 }
                 else
                 {
-                    this.configAppVM.Link(firstSelector.ReflectedDSU, secondSelector.ReflectedDVU);
+                    return this.configAppVM.Link(firstSelector.ReflectedDSU, secondSelector.ReflectedDVU);
                 }
             }
             else
             {
                 if (secondSelector.ReflectedDPU != null)
                 {
-                    this.configAppVM.Link(firstSelector.ReflectedDPU, secondSelector.ReflectedDPU);
+                    return this.configAppVM.Link(firstSelector.ReflectedDPU, secondSelector.ReflectedDPU);
                 }
                 else
                 {
-                    this.configAppVM.Link(firstSelector.ReflectedDPU, secondSelector.ReflectedDVU);
+                    return this.configAppVM.Link(firstSelector.ReflectedDPU, secondSelector.ReflectedDVU);
                 }
             }
-
-            MessageBox.Show($"Linked: {firstUnit} + {secondUnit}");
         }
 
         private void InfoButton_Click(object sender, RoutedEventArgs e)
@@ -137,12 +154,13 @@ namespace DataPipeline.View
                 return;
             }
 
-            MessageBox.Show($"Description: {dataUnit.Attribute.Description}\n" +
-                            $"Input datatype: {dataUnit.Attribute.InputDatatype}\n" +
-                            $"Input description: {dataUnit.Attribute.InputDescription}\n" +
-                            $"Output datatype: {dataUnit.Attribute.OutputDatatype}\n" +
-                            $"Output description: {dataUnit.Attribute.OutputDescription}\n",
-                            $"{dataUnit.Attribute.Name}");
+            MessageBox.Show(
+                $"Description: {dataUnit.Attribute.Description}\n" +
+                $"Input datatype: {dataUnit.Attribute.InputDatatype}\n" +
+                $"Input description: {dataUnit.Attribute.InputDescription}\n" +
+                $"Output datatype: {dataUnit.Attribute.OutputDatatype}\n" +
+                $"Output description: {dataUnit.Attribute.OutputDescription}\n",
+                $"{dataUnit.Attribute.Name}");
         }
     }
 }

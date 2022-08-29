@@ -5,7 +5,7 @@
 // <author>Benjamin Bogner</author>
 // <summary>Contains the ReflectedDataUnitSelector class.</summary>
 //-----------------------------------------------------------------------------
-namespace DataPipeline.Model
+namespace DataPipeline.Model.ReflectedDataUnits
 {
     public class ReflectedDataUnitSelector : IReflectedDataUnitVisitor
     {

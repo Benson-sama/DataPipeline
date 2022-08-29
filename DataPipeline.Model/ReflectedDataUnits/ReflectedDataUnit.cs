@@ -5,7 +5,7 @@
 // <author>Benjamin Bogner</author>
 // <summary>Contains the ReflectedDataUnit class.</summary>
 //---------------------------------------------------------------------
-namespace DataPipeline.Model
+namespace DataPipeline.Model.ReflectedDataUnits
 {
     using System;
     using System.Reflection;
@@ -16,6 +16,9 @@ namespace DataPipeline.Model
     /// </summary>
     public abstract class ReflectedDataUnit
     {
+        /// <summary>
+        /// The attribute of the data unit.
+        /// </summary>
         private DataUnitInformationAttribute attribute;
 
         /// <summary>
@@ -122,8 +125,16 @@ namespace DataPipeline.Model
             this.StopMethod.Invoke(this.Instance, null);
         }
 
+        /// <summary>
+        /// Accepts a <see cref="IReflectedDataUnitVisitor"/> that performs specific actions on this <see cref="ReflectedDataUnit"/>.
+        /// </summary>
+        /// <param name="reflectedDataUnitVisitor">The accepted <see cref="IReflectedDataUnitVisitor"/>.</param>
         public abstract void Accept(IReflectedDataUnitVisitor reflectedDataUnitVisitor);
 
+        /// <summary>
+        /// Creates a string representation of this <see cref="ReflectedDataUnit"/>.
+        /// </summary>
+        /// <returns>The name of this <see cref="ReflectedDataUnit"/>.</returns>
         public override string ToString()
         {
             return this.Attribute.Name;
