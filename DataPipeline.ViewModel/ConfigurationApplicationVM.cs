@@ -11,7 +11,6 @@ namespace DataPipeline.ViewModel
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-    using System.Reflection;
     using DataPipeline.Model;
     using DataPipeline.Model.ReflectedDataUnits;
 
@@ -171,6 +170,18 @@ namespace DataPipeline.ViewModel
         public bool Link(ReflectedDataUnit firstDU, ReflectedDataUnit secondDU)
         {
             return this.configApp.Link(firstDU, secondDU);
+        }
+
+        /// <summary>
+        /// Unlinks the specified connection between data units by calling the underlying
+        /// <seealso cref="ConfigurationApplication.Unlink(KeyValuePair{ReflectedDataUnit, ReflectedDataUnit})"/>
+        /// method.
+        /// </summary>
+        /// <param name="connection">The desired connection to unlink.</param>
+        /// <returns>The value indicating whether or not the unlink attempt was successful.</returns>
+        public bool Unlink(KeyValuePair<ReflectedDataUnit, ReflectedDataUnit> connection)
+        {
+            return this.configApp.Unlink(connection);
         }
 
         /// <summary>

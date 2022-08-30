@@ -2,19 +2,21 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             MinWidth="350" d:DesignWidth="350" MaxWidth="350"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             MinWidth="350" d:DesignWidth="350" MaxWidth="600"
              MinHeight="250" d:DesignHeight="200" MaxHeight="250"
              mc:Ignorable="d">
-    <Border BorderBrush="Black" BorderThickness="4" Margin="5">
+    <Border BorderBrush="Black" BorderThickness="4" Margin="5" Background="#9ED2C6">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Content="Number List Visualiser" FontSize="24" FontFamily="Segoe UI Black" BorderBrush="Black" BorderThickness="0 0 0 2"/>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanContentScroll="True" ScrollChanged="ScrollViewer_ScrollChanged">
-                <ItemsControl Name="itemsControl" ItemsSource="{Binding Values}">
+            <Label Grid.Row="0" Content="Number List Visualiser" FontSize="24" HorizontalAlignment="Stretch"
+                   FontFamily="Segoe UI Black" BorderBrush="Black" BorderThickness="0 0 0 2"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                          CanContentScroll="True" ScrollChanged="ScrollViewer_ScrollChanged">
+                <ItemsControl Name="itemsControl" ItemsSource="{Binding Values}" Margin="0 5 0 0">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding}" Margin="10 5 5 2" FontSize="16"/>

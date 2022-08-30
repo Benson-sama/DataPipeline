@@ -10,7 +10,7 @@
   <Class Name="DataPipeline.View.MainWindow" BaseTypeListCollapsed="true">
     <Position X="4.25" Y="0.5" Width="4" />
     <TypeIdentifier>
-      <HashCode>DAAAACAAAAgAACAAAAAAAAAAAAAAIACAAAAAAAAAAAA=</HashCode>
+      <HashCode>DAAAACAAAAgAACAAAAAAAAAAAAAAMACAAAAAAAAAAAA=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -22,7 +22,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="DataPipeline.View.Properties.Settings">
-    <Position X="4.25" Y="3.5" Width="2" />
+    <Position X="4.25" Y="3.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>

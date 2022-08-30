@@ -42,7 +42,7 @@ namespace DataPipeline.View
             this.dataUnitsListView.ItemsSource = this.configAppVM.DataUnits;
             this.sourceDataUnitComboBox.ItemsSource = this.configAppVM.SourceDataUnits;
             this.destinationDataUnitComboBox.ItemsSource = this.configAppVM.DestinationDataUnits;
-            this.dataVisualisationUnits = this.configAppVM.DataVisualisationUnits.Select(x => x.Instance as UserControl);
+            this.dataVisualisationUnits = this.configAppVM.DataVisualisationUnits.Select(x => x.Instance as UserControl).Where(x => x != null);
             this.dataVisualisationUnitsControl.ItemsSource = this.dataVisualisationUnits;
             this.connectionsListView.DataContext = this.configAppVM.Connections;
         }
@@ -124,12 +124,23 @@ namespace DataPipeline.View
 
         /// <summary>
         /// Links the selected data units from the source and destination combo boxes.
+        /// This can only be done if the data pipeline is not running.
         /// An error is shown in a <see cref="MessageBox"/> if one of the data units is not selected.
         /// </summary>
         /// <param name="sender">The sender of the event.</param>
         /// <param name="e">The arguments of the event.</param>
         private void LinkButton_Click(object sender, RoutedEventArgs e)
         {
+            if (this.configAppVM.IsRunning)
+            {
+                MessageBox.Show(
+                    "Unable to link data units when the Data Pipeline is activated. " +
+                    "Stop it and try again.",
+                    "Error");
+
+                return;
+            }
+
             ReflectedDataUnit firstDU = this.sourceDataUnitComboBox.SelectedItem as ReflectedDataUnit;
             ReflectedDataUnit secondDU = this.destinationDataUnitComboBox.SelectedItem as ReflectedDataUnit;
 
@@ -148,6 +159,43 @@ namespace DataPipeline.View
                 MessageBox.Show(
                        $"Unable to link: {firstDU} + {secondDU}\n" +
                        $"The source unit may already be connected, or datatypes are not compatible.");
+            }
+        }
+
+        /// <summary>
+        /// Unlinks the selected connection between data units.
+        /// This can only be done if the data pipeline is not running.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The arguments of the event.</param>
+        private void UnlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.configAppVM.IsRunning)
+            {
+                MessageBox.Show(
+                    "Unable to unlink data units when the Data Pipeline is activated. " +
+                    "Stop it and try again.",
+                    "Error");
+
+                return;
+            }
+
+            var button = e.Source as Button;
+
+            if (!(button.DataContext is KeyValuePair<ReflectedDataUnit, ReflectedDataUnit>))
+            {
+                return;
+            }
+
+            var connection = (KeyValuePair<ReflectedDataUnit, ReflectedDataUnit>)button.DataContext;
+
+            if (this.configAppVM.Unlink(connection))
+            {
+                MessageBox.Show($"Successfully unlinked: {connection.Key} -> {connection.Value}");
+            }
+            else
+            {
+                MessageBox.Show($"Unable to unlink: {connection.Key} -> {connection.Value}\n");
             }
         }
     }

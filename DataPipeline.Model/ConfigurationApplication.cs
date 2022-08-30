@@ -159,7 +159,7 @@ namespace DataPipeline.Model
 
             foreach (var dVU in this.DataVisualisationUnits)
             {
-                if (this.Connections.ContainsKey(dVU) || this.Connections.ContainsValue(dVU))
+                if (this.Connections.ContainsValue(dVU))
                 {
                     dVU.Start();
                 }
@@ -208,7 +208,7 @@ namespace DataPipeline.Model
         /// <returns>The value indicating whether or not the link attempt was successful.</returns>
         public bool Link(ReflectedDataUnit firstDU, ReflectedDataUnit secondDU)
         {
-            if (this.Connections.ContainsKey(firstDU))
+            if (this.IsRunning || this.Connections.ContainsKey(firstDU))
             {
                 return false;
             }
@@ -336,6 +336,124 @@ namespace DataPipeline.Model
         }
 
         /// <summary>
+        /// Determines the actual types of the data units and invokes the corresponding unlink method.
+        /// </summary>
+        /// <param name="connection">The desired connection between data units to unlink.</param>
+        /// <returns>The value indicating whether or not the unlink attempt was successful.</returns>
+        public bool Unlink(KeyValuePair<ReflectedDataUnit, ReflectedDataUnit> connection)
+        {
+            if (this.IsRunning || !this.Connections.Contains(connection))
+            {
+                return false;
+            }
+
+            ReflectedDataUnitSelector firstSelector = new ReflectedDataUnitSelector();
+            connection.Key.Accept(firstSelector);
+            ReflectedDataUnitSelector secondSelector = new ReflectedDataUnitSelector();
+            connection.Value.Accept(secondSelector);
+
+            // Source unit cannot be a DVU and destination unit cannot be a DSU.
+            if (firstSelector.ReflectedDVU != null || secondSelector.ReflectedDSU != null)
+            {
+                return false;
+            }
+
+            // Unlink based on combination of actual data units.
+            if (firstSelector.ReflectedDSU != null)
+            {
+                return secondSelector.ReflectedDPU != null
+                    ? this.Unlink(firstSelector.ReflectedDSU, secondSelector.ReflectedDPU)
+                    : this.Unlink(firstSelector.ReflectedDSU, secondSelector.ReflectedDVU);
+            }
+            else
+            {
+                return secondSelector.ReflectedDPU != null
+                    ? this.Unlink(firstSelector.ReflectedDPU, secondSelector.ReflectedDPU)
+                    : this.Unlink(firstSelector.ReflectedDPU, secondSelector.ReflectedDVU);
+            }
+        }
+
+        /// <summary>
+        /// Attempts to unlink the given connection between data units.
+        /// </summary>
+        /// <param name="dPU">The source data unit.</param>
+        /// <param name="dVU">The destination data unit.</param>
+        /// <returns>The value indicating whether or not the unlink attempt was successful.</returns>
+        private bool Unlink(ReflectedDataProcessingUnit dPU, ReflectedDataVisualisationUnit dVU)
+        {
+            if (this.TryRemoveEventHandler(dPU.Instance, dPU.ValueProcessedEvent, dVU.Instance, dVU.ValueInputMethod))
+            {
+                var connection = this.Connections.FirstOrDefault(x => x.Key == dPU && x.Value == dVU);
+                this.Connections.Remove(dPU);
+                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Remove", connection));
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to unlink the given connection between data units.
+        /// </summary>
+        /// <param name="firstDPU">The source data unit.</param>
+        /// <param name="secondDPU">The destination data unit.</param>
+        /// <returns>The value indicating whether or not the unlink attempt was successful.</returns>
+        private bool Unlink(ReflectedDataProcessingUnit firstDPU, ReflectedDataProcessingUnit secondDPU)
+        {
+            if (this.TryRemoveEventHandler(firstDPU.Instance, firstDPU.ValueProcessedEvent, secondDPU.Instance, secondDPU.ValueInputMethod))
+            {
+                var connection = this.Connections.FirstOrDefault(x => x.Key == firstDPU && x.Value == secondDPU);
+                this.Connections.Remove(firstDPU);
+                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Remove", connection));
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to unlink the given connection between data units.
+        /// </summary>
+        /// <param name="dSU">The source data unit.</param>
+        /// <param name="dVU">The destination data unit.</param>
+        /// <returns>The value indicating whether or not the unlink attempt was successful.</returns>
+        private bool Unlink(ReflectedDataSourceUnit dSU, ReflectedDataVisualisationUnit dVU)
+        {
+            if (this.TryRemoveEventHandler(dSU.Instance, dSU.ValueGeneratedEvent, dVU.Instance, dVU.ValueInputMethod))
+            {
+                var connection = this.Connections.FirstOrDefault(x => x.Key == dSU && x.Value == dVU);
+                this.Connections.Remove(dSU);
+                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Remove", connection));
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to unlink the given connection between data units.
+        /// </summary>
+        /// <param name="dSU">The source data unit.</param>
+        /// <param name="dPU">The destination data unit.</param>
+        /// <returns>The value indicating whether or not the unlink attempt was successful.</returns>
+        private bool Unlink(ReflectedDataSourceUnit dSU, ReflectedDataProcessingUnit dPU)
+        {
+            if (this.TryRemoveEventHandler(dSU.Instance, dSU.ValueGeneratedEvent, dPU.Instance, dPU.ValueInputMethod))
+            {
+                var connection = this.Connections.FirstOrDefault(x => x.Key == dSU && x.Value == dPU);
+                this.Connections.Remove(dSU);
+                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Remove", connection));
+
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Tries to add an event handler to a given event.
         /// </summary>
         /// <param name="eventInstance">The instance where the event resides.</param>
@@ -355,6 +473,35 @@ namespace DataPipeline.Model
                 MethodInfo addHandler = valueGeneratedEvent.GetAddMethod();
                 object[] addHandlerArgs = { d };
                 addHandler.Invoke(eventInstance, addHandlerArgs);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Tries to remove an event handler from a given event.
+        /// </summary>
+        /// <param name="eventInstance">The instance where the event resides.</param>
+        /// <param name="valueGeneratedEvent">The event, where the event handler gets unsubscribed.</param>
+        /// <param name="handlerInstance">The instance where the handler method resides.</param>
+        /// <param name="valueInputMethod">The method that gets unsubscribed from the event.</param>
+        /// <returns>The value indicating whether or not the attempt to remove the event handler was successful.</returns>
+        private bool TryRemoveEventHandler(object eventInstance, EventInfo valueGeneratedEvent, object handlerInstance, MethodInfo valueInputMethod)
+        {
+            try
+            {
+                Type delegateType = valueGeneratedEvent.EventHandlerType;
+                MethodInfo handlerMethodInfo = valueInputMethod;
+
+                Delegate d = Delegate.CreateDelegate(delegateType, handlerInstance, handlerMethodInfo);
+
+                MethodInfo removeHandler = valueGeneratedEvent.GetRemoveMethod();
+                object[] removeHandlerArgs = { d };
+                removeHandler.Invoke(eventInstance, removeHandlerArgs);
 
                 return true;
             }

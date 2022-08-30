@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
   <Class Name="DataPipeline.Model.ConfigurationApplication">
-    <Position X="0.5" Y="2" Width="7" />
+    <Position X="0.5" Y="2" Width="8.5" />
     <TypeIdentifier>
-      <HashCode>AAAAgAAgEKAAIAAAAAAAQAAAAAAAAgAAIAAAQAAAAAA=</HashCode>
+      <HashCode>CAAAgAAgEKAAIAQAAAgAQAAIAAAAAgAAIEAEYCAAAAE=</HashCode>
       <FileName>ConfigurationApplication.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -14,47 +14,76 @@
       <FileName>Extensions.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DataPipeline.Model.ReflectedDataSourceUnit">
-    <Position X="8" Y="5" Width="3.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>ReflectedDataSourceUnit.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DataPipeline.Model.ReflectedDataProcessingUnit">
-    <Position X="12.5" Y="5" Width="4" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAABQAAAAAA=</HashCode>
-      <FileName>ReflectedDataProcessingUnit.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DataPipeline.Model.ReflectedDataUnit">
-    <Position X="10.75" Y="0.5" Width="2.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAAAAQACAAEAAgABBAAAAYQAAAAAAAAA=</HashCode>
-      <FileName>ReflectedDataUnit.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="DataPipeline.Model.Attributes.DataInputAttribute">
-    <Position X="19.25" Y="0.5" Width="1.75" />
+    <Position X="23.25" Y="0.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Attributes\DataInputAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataPipeline.Model.Attributes.DataOutputAttribute">
-    <Position X="19.25" Y="1.75" Width="1.75" />
+    <Position X="23.25" Y="1.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Attributes\DataOutputAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DataPipeline.Model.Attributes.DataUnitInformationAttribute">
-    <Position X="16" Y="0.5" Width="3" />
+    <Position X="20" Y="0.5" Width="3" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAQAAgAAEAKAEBAAQAAAAMBAAAAAAAAAABAAA=</HashCode>
       <FileName>Attributes\DataUnitInformationAttribute.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="DataPipeline.Model.ReflectedDataUnits.ReflectedDataUnit">
+    <Position X="14.25" Y="0.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAACACAAAEQgCAAEAAgABBAAAAYQAAAAAAAAA=</HashCode>
+      <FileName>ReflectedDataUnits\ReflectedDataUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataPipeline.Model.ReflectedDataUnits.ReflectedDataSourceUnit">
+    <Position X="9.75" Y="5.75" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAACAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ReflectedDataUnits\ReflectedDataSourceUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataPipeline.Model.ReflectedDataUnits.ReflectedDataProcessingUnit">
+    <Position X="14.25" Y="5.75" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAABQAAAAAA=</HashCode>
+      <FileName>ReflectedDataUnits\ReflectedDataProcessingUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataPipeline.Model.ReflectedDataUnits.ReflectedDataUnitSelector">
+    <Position X="10" Y="2.25" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAgAAAAAAAQAAAAAAAIAAAAABAAAA=</HashCode>
+      <FileName>ReflectedDataUnits\ReflectedDataUnitSelector.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DataPipeline.Model.ReflectedDataUnits.ReflectedDataVisualisationUnit">
+    <Position X="18.75" Y="5.75" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAA=</HashCode>
+      <FileName>ReflectedDataUnits\ReflectedDataVisualisationUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataPipeline.Model.ConnectionsChangedEventArgs">
+    <Position X="0.5" Y="9" Width="7.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAABAAAAAAAAAAAAgAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ConnectionsChangedEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="DataPipeline.Model.ReflectedDataUnits.IReflectedDataUnitVisitor">
+    <Position X="9.25" Y="0.5" Width="4.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ReflectedDataUnits\IReflectedDataUnitVisitor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

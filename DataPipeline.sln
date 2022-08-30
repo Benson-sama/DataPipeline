@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberListVisualiser", "Dat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StringListVisualiser", "DataUnits\DataVisualisationUnits\StringListVisualiser\StringListVisualiser.csproj", "{E7DB987A-7C52-4619-B372-5AAF361BA592}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberDiagramVisualiser", "DataUnits\DataVisualisationUnits\NumberDiagramVisualiser\NumberDiagramVisualiser.csproj", "{CCAFDCB2-1CB5-487A-A932-A532C7A9DE4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{E7DB987A-7C52-4619-B372-5AAF361BA592}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7DB987A-7C52-4619-B372-5AAF361BA592}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7DB987A-7C52-4619-B372-5AAF361BA592}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCAFDCB2-1CB5-487A-A932-A532C7A9DE4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCAFDCB2-1CB5-487A-A932-A532C7A9DE4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCAFDCB2-1CB5-487A-A932-A532C7A9DE4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCAFDCB2-1CB5-487A-A932-A532C7A9DE4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +105,7 @@ Global
 		{C913D43F-B464-4675-A3E1-DC78AFE7C34A} = {561E55EC-25F9-4909-BA5A-96E7A67958BC}
 		{58BBE3BC-FF28-419F-8EF3-5A24523B5C07} = {9325F7DD-E23F-459A-AF9A-52D4B4BC9FD8}
 		{E7DB987A-7C52-4619-B372-5AAF361BA592} = {9325F7DD-E23F-459A-AF9A-52D4B4BC9FD8}
+		{CCAFDCB2-1CB5-487A-A932-A532C7A9DE4A} = {9325F7DD-E23F-459A-AF9A-52D4B4BC9FD8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2A67D2FF-60B9-47B9-9DB1-9DE5F16B2017}

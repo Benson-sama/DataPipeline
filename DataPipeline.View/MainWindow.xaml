@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataPipeline.View"
-        mc:Ignorable="d"
         Title="Data Pipeline © 2022 Benjamin BOGNER"
         WindowStartupLocation="CenterScreen"
-        Closed="Window_Closed">
+        Width="1200" Height="980"
+        Closed="Window_Closed"
+        mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -87,6 +88,13 @@
                                         <Label Content="{Binding Key}" FontSize="14" Foreground="#850E35"/>
                                         <Label Content="->" FontSize="14" Foreground="#850E35"/>
                                         <Label Content="{Binding Value}" FontSize="14" Foreground="#850E35"/>
+                                        <Button Content="Unlink" Foreground="#850E35" FontSize="12" Width="50" Height="20" Click="UnlinkButton_Click" Background="#FFF5E4">
+                                            <Button.Resources>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="CornerRadius" Value="5"/>
+                                                </Style>
+                                            </Button.Resources>
+                                        </Button>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

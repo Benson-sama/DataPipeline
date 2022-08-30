@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{58BBE3BC-FF28-419F-8EF3-5A24523B5C07}</ProjectGuid>
+    <ProjectGuid>{CCAFDCB2-1CB5-487A-A932-A532C7A9DE4A}</ProjectGuid>
     <OutputType>library</OutputType>
-    <RootNamespace>NumberListVisualiser</RootNamespace>
-    <AssemblyName>NumberListVisualiser</AssemblyName>
+    <RootNamespace>NumberDiagramVisualiser</RootNamespace>
+    <AssemblyName>NumberDiagramVisualiser</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -36,7 +36,7 @@
       <HintPath>..\..\..\DataPipeline.Model\bin\Debug\DataPipeline.Model.dll</HintPath>
     </Reference>
     <Reference Include="DataUnits">
-      <HintPath>..\..\DataUnits\obj\Debug\DataUnits.dll</HintPath>
+      <HintPath>..\..\DataUnits\bin\Debug\DataUnits.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -54,13 +54,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="View\NumberListVisualiser.xaml">
+    <Compile Include="View\ValuesToGraphPointsConverter.cs" />
+    <Page Include="View\NumberDiagramVisualiser.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="ViewModel\NumberListVisualiserVM.cs" />
-    <Compile Include="View\NumberListVisualiser.xaml.cs">
-      <DependentUpon>NumberListVisualiser.xaml</DependentUpon>
+    <Compile Include="ViewModel\NumberDiagramVisualiserVM.cs" />
+    <Compile Include="View\NumberDiagramVisualiser.xaml.cs">
+      <DependentUpon>NumberDiagramVisualiser.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
