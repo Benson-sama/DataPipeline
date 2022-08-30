@@ -1,21 +1,21 @@
-﻿//----------------------------------------------------------------
+﻿//-----------------------------------------------------------------------------
 // <copyright file="AssemblyInfo.cs" company="FH Wiener Neustadt">
 //     Copyright (c) FH Wiener Neustadt. All rights reserved.
 // </copyright>
 // <author>Benjamin Bogner</author>
 // <summary>Contains the AssemblyInfo.</summary>
-//----------------------------------------------------------------
+//-----------------------------------------------------------------------------
 using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("DataListViewVisualisationUnit")]
+[assembly: AssemblyTitle("StringListVisualiser")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DataListViewVisualisationUnit")]
+[assembly: AssemblyProduct("StringListVisualiser")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

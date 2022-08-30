@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="NumberListVisualiser.View.NumberListVisualiser"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             MinWidth="350" d:DesignWidth="350" MaxWidth="350"
+             MinHeight="250" d:DesignHeight="200" MaxHeight="250"
+             mc:Ignorable="d">
+    <Border BorderBrush="Black" BorderThickness="4" Margin="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Number List Visualiser" FontSize="24" FontFamily="Segoe UI Black" BorderBrush="Black" BorderThickness="0 0 0 2"/>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" CanContentScroll="True" ScrollChanged="ScrollViewer_ScrollChanged">
+                <ItemsControl Name="itemsControl" ItemsSource="{Binding Values}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Margin="10 5 5 2" FontSize="16"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>

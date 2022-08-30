@@ -161,6 +161,13 @@ namespace DataPipeline.ViewModel
             this.configApp.DataVisualisationUnits.ToList().ForEach(x => this.DestinationDataUnits.Add(x));
         }
 
+        /// <summary>
+        /// Links the specified data units by calling the underlying
+        /// <seealso cref="ConfigurationApplication.Link(ReflectedDataUnit, ReflectedDataUnit)"/> method.
+        /// </summary>
+        /// <param name="firstDU">The first data unit, whose event is the source.</param>
+        /// <param name="secondDU">The second data unit, whose method is the destination.</param>
+        /// <returns>The value indicating whether or not the link attempt was successful.</returns>
         public bool Link(ReflectedDataUnit firstDU, ReflectedDataUnit secondDU)
         {
             return this.configApp.Link(firstDU, secondDU);

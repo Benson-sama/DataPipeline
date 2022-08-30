@@ -122,6 +122,12 @@ namespace DataPipeline.View
             this.configAppVM.Stop();
         }
 
+        /// <summary>
+        /// Links the selected data units from the source and destination combo boxes.
+        /// An error is shown in a <see cref="MessageBox"/> if one of the data units is not selected.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The arguments of the event.</param>
         private void LinkButton_Click(object sender, RoutedEventArgs e)
         {
             ReflectedDataUnit firstDU = this.sourceDataUnitComboBox.SelectedItem as ReflectedDataUnit;
@@ -141,7 +147,7 @@ namespace DataPipeline.View
             {
                 MessageBox.Show(
                        $"Unable to link: {firstDU} + {secondDU}\n" +
-                       $"There may be already an existing connection, or datatypes are not compatible.");
+                       $"The source unit may already be connected, or datatypes are not compatible.");
             }
         }
     }

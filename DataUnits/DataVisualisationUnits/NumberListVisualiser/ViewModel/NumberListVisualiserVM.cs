@@ -1,38 +1,38 @@
-﻿//-----------------------------------------------------------------------------------
-// <copyright file="DataListViewVisualisationUnitVM.cs" company="FH Wiener Neustadt">
+﻿//--------------------------------------------------------------------------
+// <copyright file="NumberListVisualiserVM.cs" company="FH Wiener Neustadt">
 //     Copyright (c) FH Wiener Neustadt. All rights reserved.
 // </copyright>
 // <author>Benjamin Bogner</author>
-// <summary>Contains the DataListViewVisualisationUnitVM class.</summary>
-//-----------------------------------------------------------------------------------
-namespace DataListViewVisualisationUnit.ViewModel
+// <summary>Contains the NumberListVisualiserVM class.</summary>
+//--------------------------------------------------------------------------
+namespace NumberListVisualiser.ViewModel
 {
     using System;
     using System.Collections.ObjectModel;
     using DataUnits;
 
     /// <summary>
-    /// Represents the <see cref="DataListViewVisualisationUnitVM"/> class.
+    /// Represents the <see cref="NumberListVisualiserVM"/> class.
     /// </summary>
-    public class DataListViewVisualisationUnitVM
+    public class NumberListVisualiserVM
     {
         /// <summary>
-        /// The values of this <see cref="DataListViewVisualisationUnitVM"/>.
+        /// The values of this <see cref="NumberListVisualiserVM"/>.
         /// </summary>
         private ObservableCollection<int> values;
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="DataListViewVisualisationUnitVM"/> class.
+        /// Initialises a new instance of the <see cref="NumberListVisualiserVM"/> class.
         /// </summary>
-        public DataListViewVisualisationUnitVM()
+        public NumberListVisualiserVM()
         {
             this.Values = new ObservableCollection<int>();
         }
 
         /// <summary>
-        /// Gets the values of this <see cref="DataListViewVisualisationUnitVM"/>.
+        /// Gets the values of this <see cref="NumberListVisualiserVM"/>.
         /// </summary>
-        /// <value>The values of this <see cref="DataListViewVisualisationUnitVM"/>.</value>
+        /// <value>The values of this <see cref="NumberListVisualiserVM"/>.</value>
         public ObservableCollection<int> Values
         {
             get => this.values;

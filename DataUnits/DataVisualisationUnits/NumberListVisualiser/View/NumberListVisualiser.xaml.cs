@@ -1,30 +1,30 @@
-﻿//---------------------------------------------------------------------------------
-// <copyright file="DataListViewVisualisationUnit.xaml.cs" company="FH Wiener Neustadt">
+﻿//-----------------------------------------------------------------------------
+// <copyright file="NumberListVisualiser.xaml.cs" company="FH Wiener Neustadt">
 //     Copyright (c) FH Wiener Neustadt. All rights reserved.
 // </copyright>
 // <author>Benjamin Bogner</author>
-// <summary>Contains the DataListViewVisualisationUnit class.</summary>
-//---------------------------------------------------------------------------------
-namespace DataListViewVisualisationUnit.View
+// <summary>Contains the NumberListVisualiser class.</summary>
+//-----------------------------------------------------------------------------
+namespace NumberListVisualiser.View
 {
     using System;
     using System.Windows.Controls;
     using System.Windows.Data;
-    using global::DataListViewVisualisationUnit.ViewModel;
     using DataPipeline.Model.Attributes;
     using DataUnits;
+    using global::NumberListVisualiser.ViewModel;
 
     /// <summary>
-    /// Represents the <see cref="DataListViewVisualisationUnit"/> class.
+    /// Represents the <see cref="NumberListVisualiser"/> class.
     /// </summary>
     [DataUnitInformation(
-        name: "Number ListView Visualisation Unit",
-        Description = "Takes a value and adds it to the internal ListView.",
+        name: "Number List Visualiser",
+        Description = "Takes a value and adds it to the list of numbers.",
         InputDatatype = typeof(int),
         InputDescription = "Any given number.",
         OutputDatatype = typeof(void),
         OutputDescription = "None.")]
-    public partial class DataListViewVisualisationUnit : UserControl
+    public partial class NumberListVisualiser : UserControl
     {
         /// <summary>
         /// The locker object for the value collection.
@@ -32,33 +32,36 @@ namespace DataListViewVisualisationUnit.View
         private readonly object collectionLocker;
 
         /// <summary>
-        /// The <see cref="ViewModel.DataListViewVisualisationUnitVM"/> of this <see cref="DataListViewVisualisationUnit"/>.
+        /// The <see cref="ViewModel.NumberListVisualiserVM"/> of this <see cref="NumberListVisualiser"/>.
         /// </summary>
-        private DataListViewVisualisationUnitVM dataListViewVisualisationUnitVM;
+        private NumberListVisualiserVM numberListVisualiserVM;
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="DataListViewVisualisationUnit"/> class.
+        /// Initialises a new instance of the <see cref="NumberListVisualiser"/> class.
         /// </summary>
-        public DataListViewVisualisationUnit()
+        public NumberListVisualiser()
         {
             this.InitializeComponent();
             this.collectionLocker = new object();
-            this.DataListViewVisualisationUnitVM = new DataListViewVisualisationUnitVM();
-            BindingOperations.EnableCollectionSynchronization(this.DataListViewVisualisationUnitVM.Values, this.collectionLocker);
-            this.DataContext = this.DataListViewVisualisationUnitVM;
+            this.NumberListVisualiserVM = new NumberListVisualiserVM();
+
+            // It is important to enable collection synchronisation before setting the data context.
+            BindingOperations.EnableCollectionSynchronization(this.NumberListVisualiserVM.Values, this.collectionLocker);
+
+            this.DataContext = this.NumberListVisualiserVM;
         }
 
         /// <summary>
-        /// Gets the <see cref="ViewModel.DataListViewVisualisationUnitVM"/> of this <see cref="DataListViewVisualisationUnit"/>.
+        /// Gets the <see cref="ViewModel.NumberListVisualiserVM"/> of this <see cref="NumberListVisualiser"/>.
         /// </summary>
-        /// <value>The <see cref="ViewModel.DataListViewVisualisationUnitVM"/> of this <see cref="DataListViewVisualisationUnit"/>.</value>
-        public DataListViewVisualisationUnitVM DataListViewVisualisationUnitVM
+        /// <value>The <see cref="ViewModel.NumberListVisualiserVM"/> of this <see cref="NumberListVisualiser"/>.</value>
+        public NumberListVisualiserVM NumberListVisualiserVM
         {
-            get => this.dataListViewVisualisationUnitVM;
+            get => this.numberListVisualiserVM;
 
             private set
             {
-                this.dataListViewVisualisationUnitVM = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null");
+                this.numberListVisualiserVM = value ?? throw new ArgumentNullException(nameof(value), "The specified value cannot be null");
             }
         }
 
@@ -81,7 +84,7 @@ namespace DataListViewVisualisationUnit.View
                 return;
             }
 
-            this.dataListViewVisualisationUnitVM.InputValue(sender, e);
+            this.NumberListVisualiserVM.InputValue(sender, e);
         }
 
         /// <summary>

@@ -148,7 +148,7 @@ namespace DataPipeline.Model
         }
 
         /// <summary>
-        /// Starts all <see cref="ReflectedDataUnit"/> instances in the order DVU, DPU and DSU.
+        /// Starts all connected <see cref="ReflectedDataUnit"/> instances in the order DVU, DPU and DSU.
         /// </summary>
         public void Start()
         {
@@ -157,9 +157,30 @@ namespace DataPipeline.Model
                 return;
             }
 
-            this.DataVisualisationUnits.ForEach(x => x.Start());
-            this.DataProcessingUnits.ForEach(x => x.Start());
-            this.DataSourceUnits.ForEach(x => x.Start());
+            foreach (var dVU in this.DataVisualisationUnits)
+            {
+                if (this.Connections.ContainsKey(dVU) || this.Connections.ContainsValue(dVU))
+                {
+                    dVU.Start();
+                }
+            }
+
+            foreach (var dPU in this.DataProcessingUnits)
+            {
+                if (this.Connections.ContainsKey(dPU) || this.Connections.ContainsValue(dPU))
+                {
+                    dPU.Start();
+                }
+            }
+
+            foreach (var dSU in this.DataSourceUnits)
+            {
+                if (this.Connections.ContainsKey(dSU) || this.Connections.ContainsValue(dSU))
+                {
+                    dSU.Start();
+                }
+            }
+
             this.IsRunning = true;
         }
 
@@ -179,8 +200,19 @@ namespace DataPipeline.Model
             this.IsRunning = false;
         }
 
+        /// <summary>
+        /// Determines the actual types of the data units and invokes the corresponding link method.
+        /// </summary>
+        /// <param name="firstDU">The source data unit.</param>
+        /// <param name="secondDU">The destination data unit.</param>
+        /// <returns>The value indicating whether or not the link attempt was successful.</returns>
         public bool Link(ReflectedDataUnit firstDU, ReflectedDataUnit secondDU)
         {
+            if (this.Connections.ContainsKey(firstDU))
+            {
+                return false;
+            }
+
             ReflectedDataUnitSelector firstSelector = new ReflectedDataUnitSelector();
             firstDU.Accept(firstSelector);
             ReflectedDataUnitSelector secondSelector = new ReflectedDataUnitSelector();
@@ -207,6 +239,12 @@ namespace DataPipeline.Model
             }
         }
 
+        /// <summary>
+        /// Attempts to link the given data units.
+        /// </summary>
+        /// <param name="dSU">The source data unit.</param>
+        /// <param name="dPU">The destination data unit.</param>
+        /// <returns>The value indicating whether or not the link attempt was successful.</returns>
         public bool Link(ReflectedDataSourceUnit dSU, ReflectedDataProcessingUnit dPU)
         {
             if (!this.DataSourceUnits.Contains(dSU) || !this.DataProcessingUnits.Contains(dPU))
@@ -225,6 +263,12 @@ namespace DataPipeline.Model
             return false;
         }
 
+        /// <summary>
+        /// Attempts to link the given data units.
+        /// </summary>
+        /// <param name="dSU">The source data unit.</param>
+        /// <param name="dVU">The destination data unit.</param>
+        /// <returns>The value indicating whether or not the link attempt was successful.</returns>
         public bool Link(ReflectedDataSourceUnit dSU, ReflectedDataVisualisationUnit dVU)
         {
             if (!this.DataSourceUnits.Contains(dSU) || !this.DataVisualisationUnits.Contains(dVU))
@@ -243,6 +287,12 @@ namespace DataPipeline.Model
             return false;
         }
 
+        /// <summary>
+        /// Attempts to link the given data units.
+        /// </summary>
+        /// <param name="firstDPU">The source data unit.</param>
+        /// <param name="secondDPU">The destination data unit.</param>
+        /// <returns>The value indicating whether or not the link attempt was successful.</returns>
         public bool Link(ReflectedDataProcessingUnit firstDPU, ReflectedDataProcessingUnit secondDPU)
         {
             if (!this.DataProcessingUnits.Contains(firstDPU) || !this.DataProcessingUnits.Contains(secondDPU))
@@ -261,6 +311,12 @@ namespace DataPipeline.Model
             return false;
         }
 
+        /// <summary>
+        /// Attempts to link the given data units.
+        /// </summary>
+        /// <param name="dPU">The source data unit.</param>
+        /// <param name="dVU">The destination data unit.</param>
+        /// <returns>The value indicating whether or not the link attempt was successful.</returns>
         public bool Link(ReflectedDataProcessingUnit dPU, ReflectedDataVisualisationUnit dVU)
         {
             if (!this.DataProcessingUnits.Contains(dPU) || !this.DataVisualisationUnits.Contains(dVU))
@@ -279,6 +335,14 @@ namespace DataPipeline.Model
             return false;
         }
 
+        /// <summary>
+        /// Tries to add an event handler to a given event.
+        /// </summary>
+        /// <param name="eventInstance">The instance where the event resides.</param>
+        /// <param name="valueGeneratedEvent">The event, where the event handler gets subscribed.</param>
+        /// <param name="handlerInstance">The instance where the handler method resides.</param>
+        /// <param name="valueInputMethod">The method that gets subscribed to the event.</param>
+        /// <returns>The value indicating whether or not the attempt to add the event handler was successful.</returns>
         private bool TryAddEventHandler(object eventInstance, EventInfo valueGeneratedEvent, object handlerInstance, MethodInfo valueInputMethod)
         {
             try

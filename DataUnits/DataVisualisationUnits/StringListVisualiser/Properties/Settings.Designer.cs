@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataListViewVisualisationUnit.Properties
+namespace StringListVisualiser.Properties
 {
     
     
