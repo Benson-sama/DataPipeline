@@ -520,9 +520,23 @@ namespace DataPipeline.Model
         /// </summary>
         private void LoadDSUs()
         {
-            var dataSourceUnitFiles = Directory.EnumerateFiles("DSU", "*.dll", SearchOption.TopDirectoryOnly);
-            dataSourceUnitFiles = dataSourceUnitFiles.Concat(Directory.EnumerateFiles("DSU", "*.exe", SearchOption.TopDirectoryOnly)).ToList();
-            
+            if (!Directory.Exists("DSU"))
+            {
+                return;
+            }
+
+            IEnumerable<string> dataSourceUnitFiles;
+
+            try
+            {
+                dataSourceUnitFiles = Directory.EnumerateFiles("DSU", "*.dll", SearchOption.TopDirectoryOnly);
+                dataSourceUnitFiles = dataSourceUnitFiles.Concat(Directory.EnumerateFiles("DSU", "*.exe", SearchOption.TopDirectoryOnly)).ToList();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
             var loadedAssemblies = this.LoadAssemblies(dataSourceUnitFiles);
             var dataSourceUnitTypes = loadedAssemblies.GetDataUnitTypes();
 
@@ -550,8 +564,22 @@ namespace DataPipeline.Model
         /// </summary>
         private void LoadDPUs()
         {
-            var dataProcessingUnitFiles = Directory.EnumerateFiles("DPU", "*.dll", SearchOption.TopDirectoryOnly);
-            dataProcessingUnitFiles = dataProcessingUnitFiles.Concat(Directory.EnumerateFiles("DPU", "*.exe", SearchOption.TopDirectoryOnly)).ToList();
+            if (!Directory.Exists("DPU"))
+            {
+                return;
+            }
+
+            IEnumerable<string> dataProcessingUnitFiles;
+
+            try
+            {
+                dataProcessingUnitFiles = Directory.EnumerateFiles("DPU", "*.dll", SearchOption.TopDirectoryOnly);
+                dataProcessingUnitFiles = dataProcessingUnitFiles.Concat(Directory.EnumerateFiles("DPU", "*.exe", SearchOption.TopDirectoryOnly)).ToList();
+            }
+            catch (Exception)
+            {
+                return;
+            }
 
             var loadedAssemblies = this.LoadAssemblies(dataProcessingUnitFiles);
             var dataProcessingUnitTypes = loadedAssemblies.GetDataUnitTypes();
@@ -580,8 +608,22 @@ namespace DataPipeline.Model
         /// </summary>
         private void LoadDVUs()
         {
-            var dataVisualisationUnitFiles = Directory.EnumerateFiles("DVU", "*.dll", SearchOption.TopDirectoryOnly);
-            dataVisualisationUnitFiles = dataVisualisationUnitFiles.Concat(Directory.EnumerateFiles("DVU", "*.exe", SearchOption.TopDirectoryOnly)).ToList();
+            if (!Directory.Exists("DVU"))
+            {
+                return;
+            }
+
+            IEnumerable<string> dataVisualisationUnitFiles;
+
+            try
+            {
+                dataVisualisationUnitFiles = Directory.EnumerateFiles("DVU", "*.dll", SearchOption.TopDirectoryOnly);
+                dataVisualisationUnitFiles = dataVisualisationUnitFiles.Concat(Directory.EnumerateFiles("DVU", "*.exe", SearchOption.TopDirectoryOnly)).ToList();
+            }
+            catch (Exception)
+            {
+                return;
+            }
 
             var loadedAssemblies = this.LoadAssemblies(dataVisualisationUnitFiles);
             var dataProcessingUnitTypes = loadedAssemblies.GetDataUnitTypes();
