@@ -255,7 +255,8 @@ namespace DataPipeline.Model
             if (this.TryAddEventHandler(dSU.Instance, dSU.ValueGeneratedEvent, dPU.Instance, dPU.ValueInputMethod))
             {
                 this.Connections.Add(dSU, dPU);
-                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Add", this.Connections.Last()));
+                var connection = this.Connections.FirstOrDefault(x => x.Key == dSU && x.Value == dPU);
+                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Add", connection));
 
                 return true;
             }
@@ -279,7 +280,8 @@ namespace DataPipeline.Model
             if (this.TryAddEventHandler(dSU.Instance, dSU.ValueGeneratedEvent, dVU.Instance, dVU.ValueInputMethod))
             {
                 this.Connections.Add(dSU, dVU);
-                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Add", this.Connections.Last()));
+                var connection = this.Connections.FirstOrDefault(x => x.Key == dSU && x.Value == dVU);
+                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Add", connection));
 
                 return true;
             }
@@ -303,7 +305,8 @@ namespace DataPipeline.Model
             if (this.TryAddEventHandler(firstDPU.Instance, firstDPU.ValueProcessedEvent, secondDPU.Instance, secondDPU.ValueInputMethod))
             {
                 this.Connections.Add(firstDPU, secondDPU);
-                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Add", this.Connections.Last()));
+                var connection = this.Connections.FirstOrDefault(x => x.Key == firstDPU && x.Value == secondDPU);
+                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Add", connection));
 
                 return true;
             }
@@ -327,7 +330,8 @@ namespace DataPipeline.Model
             if (this.TryAddEventHandler(dPU.Instance, dPU.ValueProcessedEvent, dVU.Instance, dVU.ValueInputMethod))
             {
                 this.Connections.Add(dPU, dVU);
-                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Add", this.Connections.Last()));
+                var connection = this.Connections.FirstOrDefault(x => x.Key == dPU && x.Value == dVU);
+                this.ConnectionsChanged?.Invoke(this, new ConnectionsChangedEventArgs("Add", connection));
 
                 return true;
             }
