@@ -7,6 +7,7 @@ The provided data units share a generic ValueOutputEventArgs class, that is refe
 ## Data Unit Guidelines
 To implement your own data units, reference the DataPipeline.Model assembly and add the namespace DataPipeline.Model.Attributes to the usings. When designing your data units, apply the DataOutputAttribute to events that output values from the data unit and the DataInputAttribute to methods that input values into the data unit. (Only the first appearances will be used!) The output signature of the event must match the input signature of the method, otherwise connection attempts will fail. All DataUnits must provide a parameterless constructor, a Start() method and a Stop() method. If your data unit is stateless, leave these methods empty. Additionally apply the DataUnitInformationAttribute to the class that represents the data unit. It is advised to use all properties of the DataUnitInformationAttribute in order to provide enough information to the user interface later on. For data visualisation units in particular for ones that bind via an ItemsControl, the bound collection needs to be enabled for synchronisation. (See source below for further information.)
 
+## Sources
 ##### BindingOperations.EnableCollectionSynchronization Method
 ##### https://docs.microsoft.com/en-us/dotnet/api/system.windows.data.bindingoperations.enablecollectionsynchronization?view=netframework-4.7.2
 
