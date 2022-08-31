@@ -158,7 +158,7 @@ namespace DataPipeline.View
             {
                 MessageBox.Show(
                        $"Unable to link: {firstDU} + {secondDU}\n" +
-                       $"The source unit may already be connected, or datatypes are not compatible.");
+                       $"The source unit may already be connected or datatypes are not compatible.");
             }
         }
 
